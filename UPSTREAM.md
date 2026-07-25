@@ -20,8 +20,11 @@ for every imported file:
 - `pi-adapted`: Pi lifecycle, tool mapping, or Pi-specific reference behavior;
   it is maintained locally and never overwritten by automatic sync.
 
-The package keeps one skill tree. The Full workflow is retained in that tree;
-Lite routing changes how work enters it rather than duplicating it.
+The package keeps one skill tree. Full remains the feature assurance level for
+durable authority, protected contracts, final L3, whole-change Review, and live
+effects. Inside a Full feature, cohesive work packages use Standard, Protected,
+or Parallel execution tiers; this changes execution granularity without
+weakening final assurance or duplicating the skill tree.
 
 ## Offline Synchronization
 

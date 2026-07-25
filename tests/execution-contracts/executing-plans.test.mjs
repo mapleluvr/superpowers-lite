@@ -5,13 +5,14 @@ const skill = readRepoFile("skills/executing-plans/SKILL.md");
 
 assert.match(skill, /\.superpowers\/work\/<run-id>\/manifest\.json/i,
   "inline execution must start from the dynamic run manifest");
-assert.match(skill, /frontier execution[\s\S]{0,180}exactly one current frontier|exactly one current frontier[\s\S]{0,180}frontier execution/i,
-  "inline frontier execution must load exactly one current frontier");
+assert.match(skill, /exactly one current frontier[\s\S]{0,100}(?:is|as) the milestone/i,
+  "inline execution must load exactly one current milestone frontier");
 assert.match(skill, /currentFrontier[\s\S]{0,100}(?:null|none)[\s\S]{0,220}finalization[\s\S]{0,100}ready[\s\S]{0,220}(?:enter|resume|continue)[\s\S]{0,100}finalization/i,
   "a terminal-ready manifest must resume directly into finalization");
 assert.match(skill, /currentFrontier[\s\S]{0,100}(?:null|none)[\s\S]{0,220}finalization[\s\S]{0,100}ready[\s\S]{0,220}(?:only then|otherwise)[\s\S]{0,100}(?:enter finalization|stop)/i,
   "other null-current-frontier states must fail closed");
-assert.match(skill, /frontier\.json/i, "inline execution must consume the frontier index");
+assert.match(skill, /milestone[\s\S]{0,80}JSON record|JSON record[\s\S]{0,80}milestone/i,
+  "inline execution must consume the milestone JSON record");
 assert.match(skill, /run (?:current )?(?:declared )?work packages?[\s\S]{0,100}(?:declared )?order|(?:declared )?order[\s\S]{0,100}(?:current )?work packages?/i,
   "inline mode must run current work packages in order");
 assert.match(skill, /sequentially.*one writer|one writer.*sequentially/is,

@@ -13,7 +13,7 @@ Full is feature-level assurance. Execute one current Full milestone with cohesiv
 
 Use this skill only with approved durable authority and `.superpowers/work/<run-id>/manifest.json`. Read the manifest first and verify authority, canonical state, history, protected risks, and finalization state.
 
-For frontier execution, exactly one current frontier is the current milestone. Load its `frontier.md`, `frontier.json`, and `tasks/T*.md` task cards. When `currentFrontier` is null, require `finalization.status` to be `ready`, all history completed or superseded, no blocked milestone or protected risk, and the latest L2 bound to clean canonical state. If all pass, enter finalization. A null current frontier is invalid: stop unless that finalization-ready state is proven. Never fabricate or reopen a milestone.
+For frontier execution, exactly one current frontier is the current milestone. Load its milestone records and task cards. When `currentFrontier` is null, require `finalization.status` to be `ready`, all history completed or superseded, no blocked milestone or protected risk, and the latest L2 bound to clean canonical state. If all pass, enter finalization. A null current frontier is invalid: stop unless that finalization-ready state is proven. Never fabricate or reopen a milestone.
 
 Parallel SDD requires at least two independently mergeable enabling work packages; they need not be independently user-visible. They require frozen consumed interfaces or a pinned contract, disjoint `owns` and exact `mutableResources`, independent package L1, no same-current-milestone dependency path, no split transaction, and critical-path benefit after coordination, worktree, patch-admission, and milestone-L2 cost. A dependency chain, shared mutable owner, unsplit invariant, or unclear benefit stays routine inline. Standard and Micro do not use SDD. Do not consume legacy plans, copied authority, or session history as execution authority.
 
@@ -23,8 +23,8 @@ Plan the current milestone as normally two to four packages in one to three roun
 
 Before dispatch:
 
-- verify manifest/frontier authority hashes, frozen clean frontier base, current `HEAD`, tree, and clean status;
-- run L0 for the current frontier milestone exactly as declared in `frontier.json`; record command, result, base, and frontier identity;
+- verify run/milestone authority hashes, current `HEAD`, tree, and clean status;
+- run L0 for the current milestone exactly as declared in its JSON record; record command, result, base, and milestone identity;
 - failed or unavailable L0 means zero fanout: stop and rederive before dispatch;
 - verify every task card, `owns` set, exact `mutableResources` identity, dependency, acceptance mapping, and declared package L1;
 - defer settings, migrations, deploys, destructive cutovers, and other live effects.
@@ -78,7 +78,7 @@ Enter finalization only after all current milestones, milestone L2 checks, clean
 
 Run the exact declared L3 commands fail-first. On success, write a reusable evidence record bound to clean HEAD, tree, and status before and after every command; exact commands and passing results; relevant tool/runtime versions; and relevant non-secret external hashes or identities, never secret values.
 
-Then dispatch one mandatory final whole-change review from the recorded branch start through `HEAD`, including authority, manifest/milestones, commits, full diff, L1/L2/L3 evidence, known risk, and deferred live effects. The final gate has one initial pass, at most one consolidated correction frontier, and one closure re-review. The closure scope is accepted findings, fix diff, and regression evidence; unrelated non-Critical findings become deferred final-review risks. A confirmed Critical regression or false evidence may reopen the gate.
+Then dispatch one mandatory final whole-change review from the recorded branch start through `HEAD`, including authority, manifest/milestones, commits, full diff, L1/L2/L3 evidence, known risk, and deferred live effects. The final gate has one initial pass, at most one consolidated correction round, and one closure re-review. The closure scope is accepted findings, fix diff, and regression evidence; unrelated non-Critical findings become deferred final-review risks. A confirmed Critical regression or false evidence may reopen the gate.
 
 Run focused L1/L2 for accepted fixes. A source, test, build, dependency, command, base, or relevant environment change is **material invalidation**: rerun L3 once at the new clean state, then perform bounded closure review with the new diff, remaining risk, and new evidence. Read-only review alone does not invalidate L3.
 
@@ -86,4 +86,4 @@ Live effects occur only after passing L3 and final approval. Run post-effect smo
 
 ## Red Flags
 
-Never run parallel writers on overlapping paths, admit only part of a failed milestone frontier, merge a native temporary branch, call L1/L2 repository-wide completion, run early L3, skip required review, use `HEAD~1` as the whole-branch base, store secrets in evidence, or execute live effects before the final gates.
+Never run parallel writers on overlapping paths, admit only part of a failed milestone, merge a native temporary branch, call L1/L2 repository-wide completion, run early L3, skip required review, use `HEAD~1` as the whole-branch base, store secrets in evidence, or execute live effects before the final gates.

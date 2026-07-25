@@ -37,9 +37,9 @@ Reload Pi after changing package settings.
 - **Full** is triggered by unresolved design, shared contracts, persistence,
   security or privacy, concurrency or distributed state, destructive work,
   coordination, or an explicit user request. It preserves approved durable
-  authority, dynamically derived execution frontiers, isolated execution when
-  beneficial, proportional review, final whole-change review, and branch
-  completion.
+  authority and feature-level assurance while deriving user-visible milestones,
+  cohesive work packages, isolated execution when beneficial, protected-contract
+  review, final whole-change review, and branch completion.
 
 A user may request a route. New risk can escalate a task, but the workflow never
 silently downgrades after implementation starts. Verification is mandatory on
@@ -47,54 +47,69 @@ all routes.
 
 ## Durable Authority and Dynamic Frontiers
 
-The [progressive SDD workspace design](docs/superpowers/specs/2026-07-22-progressive-sdd-workspace-design.md)
-separates committed authority from derived execution state:
+The [Full milestone-execution authority](docs/superpowers/work/full-milestone-execution/README.md)
+refines the [progressive SDD workspace design](docs/superpowers/specs/2026-07-22-progressive-sdd-workspace-design.md):
 
 ```text
 docs/superpowers/work/<feature>/   # intent, protected contracts, durable decisions
-.superpowers/work/<run-id>/        # ignored manifest, current frontier, tasks, evidence
+.superpowers/work/<run-id>/        # ignored manifest, current milestone, packages, evidence
 ```
 
 Durable authority records observable intent, acceptance, hard constraints,
-non-goals, protected invariants, and live-effect boundaries. It does not predict
-a task list, dependency graph, reviewer/model allocation, or implementation
-files. `writing-plans` inspects the current code and initializes only one current
-frontier. After that frontier completes or fails, the controller derives the
-next one from the new canonical state.
+non-goals, protected invariants, and live-effect boundaries. Reuse sufficient
+approved authority instead of restarting section-by-section approval. Explicit
+brainstorming requests and unresolved product or architecture decisions still
+use the approval gate.
 
-Each worker receives one task card with its frozen base, authority hashes,
-owned paths, exact mutable resource identities, interfaces, passed L0, exact
-L1, stop conditions, and handoff path. Hidden dependencies supersede the
-frontier instead of widening the card or creating another authority brief.
+Full is the feature assurance level; it does not force every internal package to
+use Full ceremony. `writing-plans` traces one public path and initializes one
+user-visible milestone in the existing `currentFrontier` compatibility container.
+The milestone names its acceptance delta, public entrypoint, terminal controlled
+E2E, planned round count of one to three, and two to four cohesive work packages.
+It plans no later milestone and no feature-wide static DAG.
 
-Parallel work requires at least two independently useful outcomes, stable
-interfaces, disjoint writes/resources, independent L1 checks, and clear net
-benefit after worktree, patch-admission, and frontier-L2 costs. Otherwise the
-current frontier runs Inline under one writer. Protected public, security,
-migration, or concurrency contracts may still receive one bounded Review before
-dependent consumers begin.
+Choose the largest cohesive boundary that fits one controller round: a complete
+data flow, transaction, or one to two tightly coupled state machines. Package
+execution tiers are Standard for routine internals, Protected for a named public,
+security, migration, persistence, or concurrency contract, and Parallel for
+independently mergeable enabling work packages with stable interfaces, disjoint
+writes and exact mutable resource identities, independent L1, and clear net
+benefit. Enabling packages need not be independently user-visible.
 
-Concurrent implementation uses isolated `worktree: true` workers and native
-patch handoff. The controller preflights the complete patch set before one
-canonical integrator applies anything. A failed worker, ownership drift,
-resource collision, or failed check integrates zero patches. On a post-apply L1
-failure, recovery reverse-applies the current uncommitted patch and reverts
-prior frontier commits. On a frontier L2 failure after all patches are
-committed, recovery reverts those commits without reverse-applying a patch.
+Each package receives one task card with its round base, authority hashes,
+acceptance ID, owned paths, exact resources, interfaces, passed L0, exact L1,
+stop conditions, and handoff path. Internal RED/GREEN loops remain inside that
+package; they do not create new frontiers. A local defect creates a correction
+package or round inside the same milestone. A hidden dependency invalidates the
+package map and requires an explicit milestone decision; it does not silently
+widen a card.
 
-Verification stays fail-first: L0 probes prerequisites, L1 proves one task, L2
-proves the current frontier's affected closure, and finalization-only L3 runs
-the repository-wide suite. Use exact scope labels:
+Native parallel work uses isolated `worktree: true` workers and patch handoff.
+Freeze one `MILESTONE_BASE` for recovery, then a clean `ROUND_BASE` before each
+sequential round; packages inside that round may execute concurrently. Before
+any round patch is applied, the controller preflights the complete round set.
+A failed worker, ownership drift, resource collision, or failed check ultimately
+integrates zero milestone patches. On post-apply L1 failure, recovery reverses
+the current uncommitted patch and reverts prior milestone commits. On milestone
+L2 failure after all patches are committed, recovery reverts those commits
+without reverse-applying a patch, restoring the exact `MILESTONE_BASE` tree.
 
-- L1: `task-local checks passed`
-- L2: `affected closure passed`
+Verification stays fail-first: L0 proves dispatch prerequisites, package L1
+proves one work package, milestone L2 proves the integrated affected closure and
+runs the public entrypoint or controlled E2E, and finalization-only L3 runs the
+repository-wide suite. Use exact scope labels:
+
+- L1: `package-local checks passed`
+- L2: `milestone affected closure passed`
 - L3: `repository-wide suite passed`
 
 A clean state-bound L3 record may be reused until code, commands, dependencies,
 or the recorded environment changes. The earlier [fail-first execution design](docs/superpowers/specs/2026-07-19-fail-first-wave-execution-design.md)
-remains the patch-admission and recovery foundation where the progressive design
-does not override it. Legacy specs and plans remain compatible inputs for an
-explicit safe-boundary restart; existing runs are not migrated automatically.
+remains the patch-admission and recovery foundation where the milestone authority
+does not override it. Legacy specs and plans remain compatible inputs only at an
+explicit safe-boundary restart; use the [temporary migration guide](docs/superpowers/migrations/2026-07-25-temporary-full-milestone-workflow-migration.md).
+Existing runs are not migrated automatically. This workflow defines no automatic
+Leave-Undo, discard, revert, or round-budget extension for a stalled milestone.
 
 ## Pi Runtime
 
@@ -111,9 +126,25 @@ folders independently.
 
 ## Review Convergence
 
-Reviews are bounded risk gates, not open-ended improvement loops. A non-final review unit gets one initial pass and one closure pass, with one review packet per pass. A blocking finding must name an acceptance or protected boundary, show a reproducible failure, identify material behavior/data/security/public-contract impact, and explain why it cannot wait for L2, L3, or final review. Test completeness, speculative vectors, wording, metadata, and style suggestions are deferred unless that impact is demonstrated.
+Reviews are bounded risk gates, not open-ended improvement loops. Standard may
+review one named risk boundary when independent judgment is material. In Full,
+routine packages have no independent Review: use self-review, package L1,
+milestone L2, and final whole-change Review. A named protected contract may
+receive one initial pass and one closure pass before dependent work begins.
 
-Closure review is limited to the original findings, the fix diff, and adjacent regression evidence. After closure, new non-Critical findings not caused by the fix become deferred manifest risk instead of reopening the frontier. Any independent readiness, admission, acceptance, mandatory-rework, or integration adjudication uses this same budget regardless of agent name. Full work retains one final whole-change review, one consolidated correction frontier, and one closure re-review. The design contract is [review convergence](docs/superpowers/specs/2026-07-22-review-convergence-design.md).
+A blocking finding must name an acceptance or protected boundary, show a
+reproducible failure, identify material behavior, data, security, privacy, or
+public-contract impact, and explain why it cannot wait for L2, L3, or final
+Review. Test completeness, speculative vectors, wording, metadata, and style
+suggestions are deferred unless that impact is demonstrated.
+
+Closure Review is limited to the original findings, fix diff, adjacent regression
+evidence, and controller dispositions. Any readiness, admission, acceptance,
+mandatory-rework, or integration adjudication uses the same Review identity and
+budget regardless of agent name. Migration, package splitting, correction,
+renaming, or role changes cannot reset it. Full retains one final whole-change
+initial Review, at most one consolidated correction round, and one closure pass.
+The design contract is [review convergence](docs/superpowers/specs/2026-07-22-review-convergence-design.md).
 
 ## Verification
 

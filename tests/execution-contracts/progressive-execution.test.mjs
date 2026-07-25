@@ -9,8 +9,7 @@ const executionText = [sdd, implementer, inline, dispatch].join("\n---\n");
 
 for (const artifact of [
   /\.superpowers\/work\/<run-id>\/manifest\.json/i,
-  /frontier\.json/i,
-  /frontier\.md/i,
+  /milestone[\s\S]{0,80}JSON record|JSON record[\s\S]{0,80}milestone/i,
   /tasks\/T\d+\.md|task cards?/i,
 ]) {
   assert.match(executionText, artifact, `execution consumers must reference ${artifact}`);

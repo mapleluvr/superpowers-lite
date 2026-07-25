@@ -9,7 +9,7 @@ Read first:
 - task card: [TASK_CARD_FILE]
 - approved authority/contract references named by the task card
 
-Work from [WORKTREE]. Verify it is an isolated worktree at the exact frozen `ROUND_BASE` in the task card. Require the controller's manifest.json, frontier.json, and passed L0 evidence to name this current milestone and round base. Read the milestone acceptance/acceptanceDelta, adjacent public flow or public entry, consumed contracts, and adjacent interfaces/tests named by the card. If L0 evidence is missing or mismatched, or if the base, path ownership, exact `mutableResources` identities, dependencies, or acceptance command differs, stop as NEEDS_CONTEXT or BLOCKED; do not guess.
+Work from [WORKTREE]. Verify it is an isolated worktree at the exact frozen `ROUND_BASE` in the task card. Require the controller's run manifest, milestone JSON record, and passed L0 evidence to name this current milestone and round base. Read the milestone acceptance/acceptanceDelta, adjacent public flow or public entry, consumed contracts, and adjacent interfaces/tests named by the card. If L0 evidence is missing or mismatched, or if the base, path ownership, exact `mutableResources` identities, dependencies, or acceptance command differs, stop as NEEDS_CONTEXT or BLOCKED; do not guess.
 
 Your job:
 1. Inspect the mapped baseline failure, passed L0 evidence, and current owned files.
@@ -25,7 +25,7 @@ Verification boundary:
 - Do not replace a missing focused command with a broad suite. Stop and report the missing boundary.
 - Report only `package-local checks passed`; internal GREEN or package L1 cannot claim milestone acceptance, affected closure, or whole-change completion.
 
-Preserve unrelated user changes. Do not dispatch other agents or reviewers. Do not alter authority, manifest, frontier, package metadata, or shared contracts outside the task card. If a collision, hidden dependency, or stale milestone appears, stop instead of widening scope.
+Preserve unrelated user changes. Do not dispatch other agents or reviewers. Do not alter authority, run manifest, milestone records, package metadata, or shared contracts outside the task card. If a collision, hidden dependency, or stale milestone appears, stop instead of widening scope.
 
 Self-review:
 - every requirement and edge case in the task card is covered;
@@ -37,7 +37,7 @@ Self-review:
 
 Report format:
 - Status: SOURCE_READY | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
-- Frozen base, matched manifest/frontier identity, passed L0 evidence, and patch-capture state
+- Frozen base, matched run/milestone identity, passed L0 evidence, and patch-capture state
 - Files changed, including renames/deletions, and mutable resources used
 - TDD RED and GREEN commands with observed output
 - Exact package L1 result and scope-qualified claim

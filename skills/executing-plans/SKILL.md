@@ -11,7 +11,7 @@ Execute Full inline. Use `subagent-driven-development` for profitable parallel p
 
 Read `.superpowers/work/<run-id>/manifest.json`; verify authority, canonical identity, history, risks, and finalization.
 
-For frontier execution, exactly one current frontier is the milestone. Load `frontier.md`, `frontier.json`, task cards, L0/package L1/milestone union L2, public entrypoint, terminal controlled E2E, and deferred effects.
+Exactly one current frontier is the milestone. Load its Markdown and JSON records, task cards, L0/package L1/milestone union L2, public entrypoint, terminal controlled E2E, and deferred effects.
 
 When `currentFrontier` is null, require `finalization.status` to be `ready`, all history completed or superseded, no blocked milestone or protected risk, and latest L2 bound to clean canonical state. Only then enter finalization; otherwise stop. Never fabricate or reopen a milestone.
 

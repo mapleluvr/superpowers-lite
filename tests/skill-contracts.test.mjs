@@ -101,13 +101,14 @@ if (!ROUTER_ONLY) {
   for (const anchor of [
     "<HARD-GATE>",
     "## Checklist",
-    "Write durable authority",
     "consolidated decision packet",
     "The terminal state is invoking writing-plans.",
     "docs/superpowers/work/<feature>/",
   ]) {
     assert.ok(brainstorming.body.includes(anchor), `brainstorming must retain ${anchor}`);
   }
+  assert.match(brainstorming.body, /Write or amend durable authority/i,
+    "brainstorming must write or amend authority only after the sufficiency gate");
   assert.doesNotMatch(brainstorming.body, /This applies to EVERY project regardless of perceived simplicity/i);
 
   const writingPlans = splitFrontmatter(readSkill("writing-plans"));
@@ -184,9 +185,10 @@ if (!ROUTER_ONLY) {
 
   const sdd = splitFrontmatter(readSkill("subagent-driven-development"));
   assert.match(sdd.frontmatter, /Full-route work/i, "SDD must be Full-only");
-  assert.ok(sdd.body.includes("## Risk-Gated Task Review"));
+  assert.ok(sdd.body.includes("## Protected Review and Implementer Dispatch"));
   for (const anchor of [
     "manifest.json",
+    "feature-level assurance",
     "current milestone",
     "task card",
     "work package",
@@ -194,20 +196,17 @@ if (!ROUTER_ONLY) {
     "milestone L2",
     "public entry",
     "one structured record per gate",
-    "public/shared contracts",
-    "security",
-    "migrations",
-    "concurrency",
-    "high blast radius",
-    "routine packages do not dispatch",
-    "implementer tests",
+    "MILESTONE_BASE",
+    "ROUND_BASE",
+    "named protected contract",
+    "routine packages have no independent Review",
     "self-review",
-    "final whole-branch review",
+    "mandatory final whole-change review",
     "one consolidated correction",
   ]) {
     assert.match(sdd.body, new RegExp(anchor, "i"), `SDD must retain ${anchor}`);
   }
-  assert.match(sdd.body, /package-level.*risk|risk.*package-level/i);
+  assert.match(sdd.body, /tier never weakens Full assurance/i);
   assert.doesNotMatch(sdd.body, /task brief|authority brief|\.superpowers\/sdd\/progress\.md|duplicate progress ledger|fix wave/i);
 }
 

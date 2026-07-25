@@ -12,7 +12,8 @@ assert.match(skill, /currentFrontier[\s\S]{0,100}(?:null|none)[\s\S]{0,220}final
   "a terminal-ready SDD manifest must resume directly into finalization");
 assert.match(skill, /(?:null|none)[\s\S]{0,160}(?:stop|invalid|reject)[\s\S]{0,180}(?:unless|except)[\s\S]{0,120}finalization[\s\S]{0,80}ready|(?:unless|except)[\s\S]{0,120}finalization[\s\S]{0,80}ready[\s\S]{0,180}(?:null|none)[\s\S]{0,160}(?:stop|invalid|reject)/i,
   "other null-current-frontier SDD states must fail closed");
-assert.match(skill, /frontier\.json/i, "SDD must consume the frontier executable index");
+assert.match(skill, /milestone[\s\S]{0,80}JSON record|JSON record[\s\S]{0,80}milestone/i,
+  "SDD must consume the milestone JSON record");
 assert.match(skill, /task cards?/i, "SDD workers must receive task cards");
 assert.doesNotMatch(skill, /(?:approved|implementation|executable) plan|task brief|authority brief|\.superpowers\/sdd\/progress\.md|duplicate progress ledger/i,
   "SDD must not consume plans, briefs, or a duplicate progress ledger");
@@ -45,8 +46,8 @@ assert.match(skill, /Before any patch[\s\S]{0,500}write sets[\s\S]{0,140}`mutabl
 assert.match(skill, /failed|blocked|unresolved/i);
 assert.match(skill, /integrates? zero|zero.*integrat/is,
   "a failed frontier must integrate zero patches");
-assert.match(skill, /(?:run|execute).{0,80}L0.{0,120}current frontier/is,
-  "controller must run the current frontier L0");
+assert.match(skill, /(?:run|execute).{0,80}L0.{0,120}current milestone/is,
+  "controller must run the current milestone L0");
 assert.match(skill, /only after L0 passes.{0,100}dispatch/is,
   "dispatch must be gated on passing L0");
 assert.match(skill, /(?:failed|unavailable).{0,40}L0.{0,100}(?:zero|no) fanout|(?:zero|no) fanout.{0,100}(?:failed|unavailable).{0,40}L0/is,
@@ -89,8 +90,9 @@ assert.match(implementer, /task card:\s*\[TASK_CARD_FILE\]/i,
   "implementers must read one task card");
 assert.doesNotMatch(implementer, /\[BRIEF_FILE\]|task brief|authority brief|scripts\/task-brief|scripts\/review-package/i,
   "implementer prompt must not reference legacy brief helpers");
-assert.match(implementer, /manifest\.json/i, "implementers must bind the manifest identity");
-assert.match(implementer, /frontier\.json/i, "implementers must bind the frontier identity");
+assert.match(implementer, /run manifest/i, "implementers must bind the run manifest identity");
+assert.match(implementer, /milestone JSON record/i,
+  "implementers must bind the milestone record identity");
 assert.match(implementer, /mutableResources/i,
   "implementers must verify assigned mutable resources");
 assert.match(implementer, /passed L0 evidence|L0 evidence.*passed/i,

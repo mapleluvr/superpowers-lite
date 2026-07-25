@@ -6,6 +6,7 @@ const pkg = JSON.parse(readRepoFile("package.json"));
 const readme = readRepoFile("README.md");
 
 const expected = new Map([
+  ["skills/using-superpowers/SKILL.md", "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05"],
   ["skills/brainstorming/SKILL.md", "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d"],
   ["skills/brainstorming/spec-document-reviewer-prompt.md", "95a0a195de9d984be2fffa95bab16fc8c563bc296a9cfc5e9c29cb3ece0d7457"],
   ["skills/writing-plans/SKILL.md", "272e1af349f5062c28dc282b3e21b220d58d683a7314a10c455b7432ec91d845"],
@@ -16,13 +17,15 @@ const expected = new Map([
   ["skills/dispatching-parallel-agents/SKILL.md", "f0df13f584049059cc5619f90061405b89dcc6e28ab3f2a8517d27d99c7a46a6"],
   ["skills/executing-plans/SKILL.md", "bbd8d28bb655a52817cc129ce49f9e46fa7c6303f72ed5de95bfe914ef8e0ce8"],
   ["skills/using-git-worktrees/SKILL.md", "e2c3ec142e52868a51af246c620cd76ab648dcf27d6900d47e6ffd07159a9794"],
+  ["skills/test-driven-development/SKILL.md", "b5b4717b8b761cce15a6cfe9022e33fd959e0894c0c39d72c9cb49c23486c10e"],
+  ["skills/requesting-code-review/SKILL.md", "1017ccdd5bc61fab67c654cf118cbdb520464b313073a0a6b9a6b9aa647a3ad6"],
   ["skills/verification-before-completion/SKILL.md", "ea52d15aabaf72bc6b558efe2c126f161b53961090ddcd712000273bfe8c7b6c"],
   ["skills/finishing-a-development-branch/SKILL.md", "e6d4a812de900d33c6eacfb40747f99427f25c304a7b7099120f9373b115a47f"],
   ["skills/requesting-code-review/code-reviewer.md", "b2f2ec7596925fe52dac158fdfbca19b3a7d779d619c481e6706a6c0001662d3"],
 ]);
 
 const entries = new Map(manifest.files.map((entry) => [entry.path, entry]));
-assert.equal(expected.size, 13);
+assert.equal(expected.size, 16);
 for (const [path, upstreamHash] of expected) {
   const entry = entries.get(path);
   assert.ok(entry, `manifest must contain ${path}`);
@@ -76,7 +79,7 @@ assert.doesNotMatch(readme, /two or more independently useful outcomes/i);
 assert.match(readme, /protected contract|contract spine/i);
 assert.match(readme, /patch handoff|worktree:\s*true/i);
 assert.match(readme, /(?:exact mutable resource identit|mutable resource[\s\S]{0,120}exact identit)/i);
-assert.match(readme, /post-apply L1[\s\S]{0,220}reverse[\s\S]{0,220}frontier L2[\s\S]{0,220}(?:without|do not)[\s\S]{0,100}reverse/i);
+assert.match(readme, /post-apply L1[\s\S]{0,220}reverse[\s\S]{0,220}milestone\s+L2[\s\S]{0,220}(?:without|do not)[\s\S]{0,100}reverse/i);
 assert.match(readme, /L0.*L1.*L2.*L3/is);
 assert.match(readme, /finalization-only L3|L3.*only.*finalization/is);
 assert.match(readme, /package-local checks passed/i);
