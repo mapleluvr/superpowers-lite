@@ -2,6 +2,8 @@
 
 Use only when a protected authority or contract has a risk-triggered independent review budget. Routine authority receives inline self-review and user approval.
 
+First check authority sufficiency. Already approved authority that covers the outcome, acceptance, constraints, protected contracts, and effects should bind into writing-plans without renewed approval. Do not demand derived `acceptanceDelta`, `publicEntrypoint`, or cohesive work-package details; planning derives them.
+
 ```text
 Review [AUTHORITY_DIR] read-only against the user's approved decisions. Do not design implementation tasks.
 

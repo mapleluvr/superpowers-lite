@@ -5,24 +5,24 @@ description: "Use this skill for Full-route work, substantive design decisions, 
 
 # Brainstorming Ideas Into Durable Authority
 
-Use this skill for Full-route work, unresolved product or architecture choices, or an explicit brainstorming request. When invoked, its Full design and approval gates remain mandatory.
+Use this skill for Full-route work, unresolved product or architecture choices, or an explicit brainstorming request. For Full execution, check authority sufficiency before opening design questions. When already approved authority is sufficient, reuse and bind it, then invoke writing-plans without reapproval. An explicit brainstorming request still explores the requested subject rather than silently taking that fast path. When decisions are unresolved or authority is missing, collect them in one consolidated decision packet where possible.
 
-Understand the current project, clarify one question at a time, compare viable approaches, and obtain section-by-section user approval. The output is minimal durable authority: what must be true and what must not change. Runtime task decomposition belongs to writing-plans and SDD.
+Understand the current project and resolve only missing product or protected-contract decisions. The output is minimal durable authority: what must be true and what must not change. Runtime task decomposition belongs to writing-plans and SDD.
 
 <HARD-GATE>
-Do NOT invoke an implementation skill, write code, scaffold, or take implementation action until the design is presented and approved. This applies to EVERY project regardless of perceived simplicity.
+Do NOT invoke an implementation skill, write code, scaffold, or take implementation action while product, architecture, or protected-contract decisions remain unresolved. When existing authority is sufficient, bind it and invoke writing-plans without repeated design approval.
 </HARD-GATE>
 
 ## Checklist
 
-1. **Explore project context** - inspect files, docs, and recent commits.
-2. **Ask clarifying questions** - one at a time; establish purpose, constraints, and observable success.
-3. **Compare 2-3 approaches** - explain trade-offs and recommend one.
-4. **Present design sections** - scale detail to risk and obtain approval after each section.
-5. **Write durable authority** - use `docs/superpowers/work/<feature>/`.
+1. **Check context and authority sufficiency** - inspect files, docs, recent commits, and approved authority for observable outcomes, acceptance IDs, constraints, protected contracts, and effect authorization.
+2. **Ask only unresolved questions** - establish missing purpose, constraints, or observable success and consolidate related decisions into one decision packet when possible.
+3. **Compare viable approaches when needed** - explain trade-offs and recommend one for a remaining decision.
+4. **Present new or amended design** - scale detail to risk and obtain approval for the newly resolved authority.
+5. **Write or amend durable authority** - use `docs/superpowers/work/<feature>/`.
 6. **Self-review** - remove placeholders, ambiguity, contradictions, and implementation leakage.
-7. **Commit authority** - commit only the approved durable documents.
-8. **User reviews written authority** - apply requested corrections and reconfirm.
+7. **Commit authority** - commit only newly approved durable documents.
+8. **User reviews written authority** - after an amendment, apply requested corrections and reconfirm; do not reapprove sufficient existing authority.
 9. **Transition** - invoke writing-plans to initialize the current ignored workspace/frontier.
 
 **The terminal state is invoking writing-plans.** Do not invoke another implementation skill first.
@@ -81,7 +81,7 @@ Check:
 
 Fix document defects inline. If the product decision is unresolved, return to the user rather than filling the gap with implementation detail.
 
-After commit, ask the user to review the written authority. On approval invoke writing-plans, which initializes `.superpowers/work/<run-id>/` and only its current frontier.
+After writing or amending authority, ask the user to review it. On approval invoke writing-plans, which initializes `.superpowers/work/<run-id>/` and only its current frontier. When authority was already sufficient, bind it and transition directly without another approval gate.
 
 ## Visual Companion
 

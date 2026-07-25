@@ -28,7 +28,7 @@ assert.match(skill, /(?:do not|never)[\s\S]{0,120}(?:copy|rename|migrate)[\s\S]{
   "legacy bootstrap must not copy or bulk-migrate legacy authority");
 assert.match(skill, /active legacy run[\s\S]{0,120}(?:unchanged|not migrated|do not migrate)/i,
   "active legacy runs must remain unchanged");
-for (const field of ["acceptanceDelta", "publicEntrypoint", "terminalE2E", "observableSuccess", "consumedContracts", "laterExclusions", "workPackages", "plannedRounds"]) {
+for (const field of ["acceptanceDelta", "publicEntrypoint", "terminalE2E", "observableSuccess", "consumedContracts", "laterExclusions", "workPackages", "plannedRoundCount"]) {
   assert.match(skill, new RegExp(field, "i"), `current milestone must record ${field}`);
 }
 assert.match(skill, /current (?:runtime )?frontier.*milestone container|milestone container.*current (?:runtime )?frontier/is,

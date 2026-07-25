@@ -1,17 +1,18 @@
 # Current Frontier Review Prompt
 
-Routine frontiers use controller self-review. Use an independent reviewer only when a protected-boundary readiness decision already has review budget; the call counts as a review pass.
+Routine milestone derivation uses controller self-review. Use an independent reviewer only when a named protected-contract readiness decision already has Review budget; the call counts as a Review pass.
 
 ```text
-Review [RUN_MANIFEST] and its current frontier read-only against [AUTHORITY_DIR]. Do not plan later work.
+Review [RUN_MANIFEST] and its current frontier milestone container read-only against [AUTHORITY_DIR]. Do not plan later work.
 
 Block only when:
 - the authority commit/hash is missing, stale, or unapproved;
 - manifest does not identify exactly one current frontier;
+- the milestone omits `acceptanceDelta`, `publicEntrypoint`, `terminalE2E`, `observableSuccess`, consumed contracts, later exclusions, cohesive work packages, or planned rounds;
 - current ownership or mutable resources overlap;
 - a mandatory acceptance/path lacks an owner, real entry point, or focused command;
 - Parallel lacks demonstrated independence or net benefit;
-- a static DAG predicts later tasks/waves/frontiers;
+- a later milestone is predicted or a static DAG predicts later tasks/waves/frontiers;
 - derived state changes durable authority;
 - L2 is fake affected closure or L3 appears before finalization;
 - a hidden dependency, placeholder, or invalidation is ignored.
