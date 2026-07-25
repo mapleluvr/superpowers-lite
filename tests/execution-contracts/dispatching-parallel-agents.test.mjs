@@ -35,8 +35,8 @@ assert.match(skill, /implementation.*worktree:\s*true/is,
 assert.match(skill, /patch handoff/i, "implementation workers must return patches");
 assert.match(skill, /subagent-driven-development/i,
   "implementation admission must delegate to SDD rather than duplicate it");
-assert.match(skill, /failed.*frontier.*(?:integrates? zero|zero.*integrat)/is,
-  "a failed implementation frontier must integrate zero patches");
+assert.match(skill, /failed.*(?:package set|milestone frontier).*(?:integrates? zero|zero.*integrat)/is,
+  "a failed implementation package set must integrate zero patches");
 assert.match(skill, /overlap.*sequential|sequential.*overlap/is,
   "overlapping ownership must stay sequential");
 assert.match(skill, /milestone (?:union )?L2|L2.*successful integration/is,

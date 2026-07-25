@@ -1,6 +1,6 @@
 ---
 name: dispatching-parallel-agents
-description: Use when facing 2+ independent domains that can proceed without shared state or sequential dependencies
+description: Use when 2+ independent domains can proceed without shared state or sequential dependencies
 ---
 
 # Dispatching Parallel Agents
@@ -9,20 +9,21 @@ description: Use when facing 2+ independent domains that can proceed without sha
 
 Dispatch one agent per independent problem domain with focused, self-contained context. This applies to **investigation and implementation** units, but their isolation and handoff rules differ.
 
-**Core principle:** concurrency is earned by proved independence and net benefit, not by task count. If benefit or independence is unclear, choose Inline; Inline fallback is the default.
+**Core principle:** concurrency is earned by proved independence and net benefit, not package count. If benefit or independence is unclear, choose Inline; Inline fallback is the default.
 
 ## Independence Predicate
 
-Implementation dispatch starts from `.superpowers/work/<run-id>/manifest.json`, its exactly one current frontier, and that frontier's task cards. Units may share a frontier only when all are true:
+Implementation dispatch starts from `.superpowers/work/<run-id>/manifest.json`, its exactly one current frontier acting as the current milestone, and that milestone's task cards. Independently mergeable enabling work packages may share a milestone even though they need not be independently user-visible or useful to the user. All must be true:
 
-- they consume the same immutable inputs or pinned contract versions;
+- they consume the same immutable inputs or pinned contract versions, with frozen consumed interfaces;
 - there is no same-frontier dependency path between them;
 - they have disjoint writes or disjoint `owns` paths;
 - mutable resources such as ports, databases, generated files, settings, and fixtures are isolated;
-- at least two independently useful outcomes can complete without making another output necessary or unsafe;
-- coordination, worktree, patch-admission, and frontier L2 cost is below expected critical-path savings.
+- each has independent package L1;
+- no split transaction or recovery invariant exists; and
+- coordination, worktree, patch-admission, and milestone L2 cost is below expected critical-path benefit.
 
-If ownership overlaps, contracts are still changing, resources cannot be isolated, or net benefit is weak, keep work sequential or redesign the boundary. Do not ask agents to resolve collisions after dispatch.
+If ownership overlaps, contracts are still changing, resources cannot be isolated, or net benefit is weak, keep work sequentially in one writer or redesign the boundary. Do not ask agents to resolve collisions after dispatch.
 
 ## Mode 1: Read-Only Investigation
 
@@ -30,18 +31,18 @@ Use for independent failures, research questions, or code areas whose conclusion
 
 The controller compares results, resolves contradictions, and decides what work follows. Investigation findings are not implementation patches or approval.
 
-## Mode 2: Full Implementation Frontier
+## Mode 2: Isolated Implementation Packages
 
-Use only when the current frontier establishes the predicate above. Each implementation task receives:
+Use only when the current milestone establishes the predicate above. Each implementation package receives:
 
 - frozen base and pinned contract identities;
 - `owns`, dependencies, and isolated mutable resources;
-- task card path, task-local L1 command, and expected evidence;
+- task card path, package-local L1 command, milestone acceptance/public flow, and expected evidence;
 - report path and status vocabulary.
 
 Dispatch native implementation workers with `worktree: true`. They return a patch handoff and report; they do not merge temporary branches or write canonical state.
 
-Delegate complete-set preflight, review, admission, quarantine, and canonical integration to `subagent-driven-development`. Do not duplicate that algorithm here. A failed implementation frontier integrates zero patches. After successful atomic integration, the controller runs the declared frontier L2 affected closure. L3 remains finalization-only.
+Delegate complete-set preflight, review, admission, quarantine, and canonical integration to `subagent-driven-development`. Do not duplicate that algorithm here. A failed implementation package set integrates zero patches. After successful atomic integration, the controller runs the milestone union L2 affected closure through the declared public entry or controlled E2E. L3 remains finalization-only.
 
 ## Focused Prompts
 

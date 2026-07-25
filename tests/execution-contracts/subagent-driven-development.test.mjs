@@ -23,7 +23,9 @@ assert.match(skill, /need not be independently (?:user[- ]visible|useful to the 
 assert.doesNotMatch(skill, /two or more independently useful outcomes/i,
   "parallel SDD must remove the micro-frontier predicate");
 assert.match(skill, /single canonical integrator/i, "one integrator must own canonical writes");
-assert.match(skill, /frozen (?:clean )?(?:frontier )?base/i, "parallel tasks must use one frozen clean base");
+assert.match(skill, /MILESTONE_BASE/i, "recovery must bind one clean milestone base");
+assert.match(skill, /ROUND_BASE/i, "each round must bind one clean dispatch base");
+assert.match(skill, /planned rounds sequentially/i, "dependent rounds must execute sequentially");
 assert.match(skill, /worktree:\s*true/i, "native Pi implementation workers must use isolated worktrees");
 assert.match(skill, /native.*handoff.*patch|native.*patch handoff/is,
   "native worktree output must be treated as a patch handoff");
@@ -49,12 +51,12 @@ assert.match(skill, /only after L0 passes.{0,100}dispatch/is,
   "dispatch must be gated on passing L0");
 assert.match(skill, /(?:failed|unavailable).{0,40}L0.{0,100}(?:zero|no) fanout|(?:zero|no) fanout.{0,100}(?:failed|unavailable).{0,40}L0/is,
   "failed or unavailable L0 must stop fanout");
-assert.match(skill, /post-apply L1 failure[\s\S]{0,300}reverse-(?:apply|appl)[\s\S]{0,300}revert every earlier commit from this frontier/i,
-  "post-apply L1 recovery must reverse the uncommitted patch before reverting earlier frontier commits");
-assert.match(skill, /frontier L2 failure[\s\S]{0,300}do not reverse-apply[\s\S]{0,300}revert every commit from this frontier/i,
-  "post-commit frontier L2 recovery must revert committed frontier changes without reverse-applying a patch");
-assert.match(skill, /(?:original|frozen|FRONTIER_BASE).{0,60}tree|tree.{0,60}(?:original|frozen|FRONTIER_BASE)/is,
-  "failed-frontier recovery must prove the original tree");
+assert.match(skill, /post-apply L1 failure[\s\S]{0,300}reverse-(?:apply|appl)[\s\S]{0,300}revert every earlier current-milestone commit/i,
+  "post-apply L1 recovery must reverse the uncommitted patch before reverting earlier milestone commits");
+assert.match(skill, /milestone union L2 failure[\s\S]{0,300}do not reverse-apply[\s\S]{0,300}revert every current-milestone commit/i,
+  "post-commit milestone L2 recovery must revert committed milestone changes without reverse-applying a patch");
+assert.match(skill, /MILESTONE_BASE.{0,80}tree|tree.{0,80}MILESTONE_BASE/is,
+  "failed-milestone recovery must prove the original milestone tree");
 assert.match(skill, /without rewriting history|do not rewrite history/i,
   "recovery must use non-destructive history");
 assert.match(skill, /milestone (?:union )?L2/i,
@@ -74,12 +76,12 @@ for (const evidence of [
   assert.match(skill, evidence, `finalization must include ${evidence}`);
 }
 
-assert.match(skill, /hidden dependency[\s\S]{0,160}supersede/i,
-  "hidden dependencies must supersede the current frontier");
-assert.match(skill, /local defect[\s\S]{0,180}correction frontier/i,
-  "local implementation defects must create correction frontiers");
-assert.match(skill, /two rejected candidates[\s\S]{0,220}core-contract[\s\S]{0,220}re-?decomposition/i,
-  "two rejected core-contract candidates must force re-decomposition");
+assert.match(skill, /hidden dependency[\s\S]{0,160}invalidates? the package map[\s\S]{0,180}rederive[\s\S]{0,120}current milestone/i,
+  "hidden dependencies must invalidate and rederive the current milestone package map");
+assert.match(skill, /local package defect[\s\S]{0,220}same current milestone[\s\S]{0,180}correction work package/i,
+  "local implementation defects must stay in the current milestone as correction package work");
+assert.match(skill, /two rejected core-contract candidates[\s\S]{0,220}package re-?decomposition/i,
+  "two rejected core-contract candidates must force package re-decomposition");
 assert.match(skill, /one structured record per gate/i,
   "gate evidence must default to one structured record");
 

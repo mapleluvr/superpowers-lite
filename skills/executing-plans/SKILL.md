@@ -1,39 +1,39 @@
 ---
 name: executing-plans
-description: Use when approved Full work must execute the current dynamic frontier inline in this session
+description: Use when approved Full work must execute the current dynamic milestone inline in this session
 ---
 
 # Executing Plans
 
-Execute a Full run inline when delegation is unavailable. Use `subagent-driven-development` for profitable isolated parallel work.
+Execute Full inline. Use `subagent-driven-development` for profitable parallel packages.
 
 ## Load Manifest
 
-Read `.superpowers/work/<run-id>/manifest.json` and verify its authority hashes, canonical `HEAD`/tree/status, history, protected risks, and finalization state.
+Read `.superpowers/work/<run-id>/manifest.json`; verify authority, canonical identity, history, risks, and finalization.
 
-For frontier execution, a non-null `currentFrontier` requires exactly one current frontier. Load its `frontier.md`, `frontier.json`, task cards, selective baseline, ownership, resources, contract pins, L0/L1/L2, and deferred effects.
+For frontier execution, exactly one current frontier is the milestone. Load `frontier.md`, `frontier.json`, task cards, L0/package L1/milestone union L2, public entrypoint, terminal controlled E2E, and deferred effects.
 
-When `currentFrontier` is null, require `finalization.status` to be `ready`, all history completed or superseded, no blocked frontier or protected risk, and the latest L2 bound to the clean canonical state. If all pass, enter finalization. A null current frontier is invalid: stop unless that finalization-ready state is proven. Never fabricate or reopen a frontier.
+When `currentFrontier` is null, require `finalization.status` to be `ready`, all history completed or superseded, no blocked milestone or protected risk, and latest L2 bound to clean canonical state. Only then enter finalization; otherwise stop. Never fabricate or reopen a milestone.
 
 ## Execute Inline
 
-Run current tasks from `frontier.json` in order, sequentially in one writer:
+Run current work packages in declared order, sequentially in one writer:
 
-1. Obey each task card's ownership and mutable resources.
-2. Run frontier L0 before any L1; failed or unavailable L0 stops for rederivation.
-3. Preserve TDD RED, implement, run exact declared L1, inspect, and commit atomically.
-4. Record only `task-local checks passed`; stop on drift, hidden dependency, or invalid contract.
+1. Obey task-card ownership and mutable resources.
+2. Run L0 before any package L1; failed or unavailable L0 stops for rederivation.
+3. Keep internal TDD RED/GREEN inside the cohesive package, implement, run its exact declared package L1, inspect, and commit atomically.
+4. Record only `package-local checks passed`; package L1 or internal GREEN cannot complete or prove the milestone. Stop on drift, hidden dependency, or invalid contract.
 
-After all current tasks finish, run the terminal frontier L2 exactly once after all current tasks, never between tasks. Report only `affected closure passed` from clean state.
+Run the terminal milestone union L2 exactly once after all current work packages, never between work packages. It must exercise the declared public entry or controlled E2E; report only `milestone affected closure passed` from clean state.
 
-A missing focused command requires boundary redesign, a focused harness, or final-integration deferral, never an early repository-wide suite. No task or intermediate frontier runs L3.
+A missing focused command requires redesign, a focused harness, or final-integration deferral, never an early repository-wide suite. No work package or intermediate milestone runs L3.
 
 ## Recovery
 
-A hidden dependency supersedes the current frontier. A local defect with a valid boundary creates a correction frontier. Two rejected candidates for one frontier due core-contract failure force re-decomposition, a smaller acceptance boundary, or a prior contract/probe frontier.
+A hidden dependency invalidates the package map; stop and rederive this milestone. A local package defect stays in the current milestone as a correction work package/round, never a new frontier. Two core-contract candidate failures force package re-decomposition or a contract/probe work package directly linked to the blocked public path.
 
 ## Finalization
 
-From a proven finalization-ready manifest, run or reuse a valid L3 evidence record, mandatory final review, and material-invalidation handling before live effects. Then invoke `finishing-a-development-branch`.
+From a proven finalization-ready manifest, run or reuse a valid L3 evidence record, mandatory final whole-change review, and material-invalidation handling before live effects. Then invoke `finishing-a-development-branch`.
 
 Stop for stale identity, blockers, unavailable evidence, ownership collision, or decisions requiring approval. Never widen scope to continue.

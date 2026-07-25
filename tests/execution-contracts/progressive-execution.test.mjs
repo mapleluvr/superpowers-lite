@@ -18,18 +18,18 @@ for (const artifact of [
 
 assert.match(sdd, /one structured record per gate/i,
   "SDD must default to compact structured gate evidence");
-assert.match(sdd, /evidence\/l0\/record\.json[\s\S]{0,240}evidence\/l1\/<task-id>\.json[\s\S]{0,240}evidence\/l2\/record\.json/is,
-  "SDD must name compact L0/L1/L2 evidence records");
+assert.match(sdd, /evidence\/l0\/record\.json[\s\S]{0,240}evidence\/l1\/<package-id>\.json[\s\S]{0,240}evidence\/l2\/record\.json/is,
+  "SDD must name compact L0/package-L1/milestone-L2 evidence records");
 assert.match(sdd, /finalization\/evidence\/l3\.json/i,
   "SDD must name finalization L3 evidence");
 assert.match(sdd, /Do not create[\s\S]{0,180}duplicate.*(?:log|JSON|status|manifest)/i,
   "SDD must prohibit duplicate evidence ledgers");
-assert.match(sdd, /hidden dependency[\s\S]{0,160}supersede/i,
-  "hidden dependencies must supersede stale frontiers");
-assert.match(sdd, /local defect[\s\S]{0,180}correction frontier/i,
-  "local defects must become correction frontiers");
-assert.match(sdd, /two rejected candidates[\s\S]{0,220}core-contract[\s\S]{0,220}re-?decomposition/i,
-  "repeated core-contract failure must re-decompose before another attempt");
+assert.match(sdd, /hidden dependency[\s\S]{0,160}invalidates? the package map[\s\S]{0,180}rederive[\s\S]{0,120}current milestone/i,
+  "hidden dependencies must invalidate and rederive the current milestone package map");
+assert.match(sdd, /local package defect[\s\S]{0,220}same current milestone[\s\S]{0,180}correction work package/i,
+  "local defects must stay in the current milestone as correction package work");
+assert.match(sdd, /two rejected core-contract candidates[\s\S]{0,220}package re-?decomposition/i,
+  "repeated core-contract failure must re-decompose packages before another attempt");
 assert.match(inline, /current work packages?[\s\S]{0,160}(?:declared )?order/i,
   "Inline must run only the current milestone packages in order");
 assert.match(inline, /milestone (?:union )?L2[\s\S]{0,160}exactly once after all current (?:work )?packages/is,

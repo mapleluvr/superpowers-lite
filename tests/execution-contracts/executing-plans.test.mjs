@@ -9,10 +9,10 @@ assert.match(skill, /frontier execution[\s\S]{0,180}exactly one current frontier
   "inline frontier execution must load exactly one current frontier");
 assert.match(skill, /currentFrontier[\s\S]{0,100}(?:null|none)[\s\S]{0,220}finalization[\s\S]{0,100}ready[\s\S]{0,220}(?:enter|resume|continue)[\s\S]{0,100}finalization/i,
   "a terminal-ready manifest must resume directly into finalization");
-assert.match(skill, /(?:null|none)[\s\S]{0,160}(?:stop|invalid|reject)[\s\S]{0,180}(?:unless|except)[\s\S]{0,120}finalization[\s\S]{0,80}ready|(?:unless|except)[\s\S]{0,120}finalization[\s\S]{0,80}ready[\s\S]{0,180}(?:null|none)[\s\S]{0,160}(?:stop|invalid|reject)/i,
+assert.match(skill, /currentFrontier[\s\S]{0,100}(?:null|none)[\s\S]{0,220}finalization[\s\S]{0,100}ready[\s\S]{0,220}(?:only then|otherwise)[\s\S]{0,100}(?:enter finalization|stop)/i,
   "other null-current-frontier states must fail closed");
 assert.match(skill, /frontier\.json/i, "inline execution must consume the frontier index");
-assert.match(skill, /current work packages?[\s\S]{0,160}(?:declared )?order|(?:declared )?order[\s\S]{0,160}current work packages?/i,
+assert.match(skill, /run (?:current )?(?:declared )?work packages?[\s\S]{0,100}(?:declared )?order|(?:declared )?order[\s\S]{0,100}(?:current )?work packages?/i,
   "inline mode must run current work packages in order");
 assert.match(skill, /sequentially.*one writer|one writer.*sequentially/is,
   "inline mode must execute packages sequentially in one writer");
@@ -32,12 +32,12 @@ assert.match(skill, /package-local checks passed/i);
 assert.match(skill, /milestone affected closure passed/i);
 assert.match(skill, /public (?:entry|Entrypoint)|controlled E2E/i,
   "milestone L2 must exercise a public entry or controlled E2E");
-assert.match(skill, /hidden dependency[\s\S]{0,160}supersede/i,
-  "inline hidden dependencies must supersede the frontier");
-assert.match(skill, /local defect[\s\S]{0,180}correction frontier/i,
-  "inline local defects must create correction frontiers");
-assert.match(skill, /two rejected candidates[\s\S]{0,220}core-contract[\s\S]{0,220}re-?decomposition/i,
-  "two rejected core-contract candidates must force re-decomposition");
+assert.match(skill, /hidden dependency[\s\S]{0,160}invalidates? the package map[\s\S]{0,160}rederive[\s\S]{0,100}milestone/i,
+  "inline hidden dependencies must invalidate and rederive the milestone package map");
+assert.match(skill, /local package defect[\s\S]{0,180}current milestone[\s\S]{0,180}correction work package/i,
+  "inline local defects must stay in the current milestone as correction package work");
+assert.match(skill, /(?:two core-contract candidate failures|two rejected candidates[\s\S]{0,120}core-contract)[\s\S]{0,220}package re-?decomposition/i,
+  "two rejected core-contract candidates must force package re-decomposition");
 assert.doesNotMatch(skill, /execution graph|topological wave|synthetic DAG|task brief|authority brief|duplicate progress ledger|\.superpowers\/sdd\/progress\.md/i,
   "inline execution must not consume legacy graph, brief, or ledger artifacts");
 assert.match(skill, /No (?:work )?package or (?:intermediate )?milestone.*L3/i,

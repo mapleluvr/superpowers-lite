@@ -37,6 +37,12 @@ assert.match(sdd, /current milestone[\s\S]{0,220}(?:one to three|1[-–]3)[\s\S]
   "SDD must execute the bounded current-milestone rounds");
 assert.match(sdd, /same (?:current )?milestone[\s\S]{0,180}(?:across|through)[\s\S]{0,120}(?:package )?rounds/i,
   "package rounds must not mint new milestones or frontiers");
+assert.match(sdd, /process[\s\S]{0,80}planned rounds sequentially/i,
+  "SDD must process dependent rounds sequentially");
+assert.match(sdd, /MILESTONE_BASE[\s\S]{0,240}ROUND_BASE/i,
+  "SDD must separate milestone recovery identity from each round dispatch base");
+assert.match(sdd, /current round[\s\S]{0,180}native parallel group|native parallel group[\s\S]{0,180}current round/i,
+  "SDD must parallelize packages within one eligible round rather than across dependencies");
 
 for (const content of [sdd, dispatch]) {
   assert.match(content, /independently mergeable (?:enabling )?(?:work )?packages?/i,

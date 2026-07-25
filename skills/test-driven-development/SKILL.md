@@ -57,6 +57,8 @@ Implement fresh from tests. Period.
 
 ## Red-Green-Refactor
 
+Inside a cohesive work package, internal RED-GREEN iterations stay within that package and its package L1. Do not create or open a frontier or controller round for each test, assertion, or RED; lower-tier evidence cannot prove milestone acceptance.
+
 ```dot
 digraph tdd_cycle {
     rankdir=LR;
