@@ -11,7 +11,7 @@ description: Use when about to claim work is complete, fixed, or passing, before
 NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-Evidence before claims, always. "Full command" means the complete command that proves the stated scope, not automatically the repository-wide suite.
+Evidence first. A full command proves stated scope, not automatically the repository-wide suite.
 
 ## Name the Scope First
 
@@ -20,11 +20,11 @@ Identify the claim's scope and tier before choosing a command:
 | Tier | Evidence scope | Permitted success language |
 |---|---|---|
 | L0 | cheapest prerequisite or structural probe | name that probe only |
-| L1 | one task's owned behavior | `task-local checks passed` |
-| L2 | integrated affected dependency closure | `affected closure passed` |
+| L1 | one package behavior | `package-local checks passed` |
+| L2 | integrated milestone closure | `milestone integrated affected closure passed` |
 | L3 | complete finalization suite | `repository-wide suite passed` |
 
-L1 or L2 evidence must not support "all checks passed," whole-change completion, or a repository-wide claim. Conversely, do not run L3 merely to prove an L1 or L2 claim. The dynamic manifest's finalization gate owns L3.
+Package L1/internal GREEN cannot prove milestone or acceptance completion. L1/L2 cannot support "all checks," whole-change completion, or repository-wide claims. Do not run L3 for L1/L2. The manifest finalization gate owns L3.
 
 ## Verification Gate
 
@@ -34,7 +34,7 @@ Before any positive status claim:
 2. **RUN:** Execute that exact command fresh and to completion. Stop on the first failed tier; do not climb to a more expensive tier.
 3. **READ:** Inspect complete output, exit code, failure count, warnings relevant to the claim, and generated artifacts.
 4. **BIND:** Record the exact command, exit code/result, timestamp, `HEAD` or tree identity, dirty state, and material tool/runtime versions.
-5. **COMPARE:** Confirm current state still matches the record. If source, dependencies, command, environment fingerprint, or dirty state changes, the evidence is invalid for the changed scope.
+5. **COMPARE:** Confirm current state still matches record. If source, dependencies, command, environment fingerprint, or dirty state changes, the evidence is invalid for the changed scope. For milestone L2, record public entry or controlled E2E result.
 6. **CLAIM:** Use only the tier's permitted language and name remaining unverified scope.
 
 A passing command with stale state, a partial invocation, or a broader claim is not verification.

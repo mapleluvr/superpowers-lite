@@ -20,6 +20,8 @@ for (const content of [review, reviewer, protectedReviewer]) {
 
 assert.match(review, /one initial review[\s\S]{0,180}one consolidated correction[\s\S]{0,180}one closure review/i,
   "each protected/final Review identity must remain bounded");
+assert.match(review, /Standard[\s\S]{0,180}(?:risk-gated|risk boundary|shared behavior)/i,
+  "Standard must retain its risk-gated non-final Review path");
 assert.doesNotMatch(reviewText, /review-unit type: protected contract, frontier boundary/i,
   "ordinary frontier boundaries must not be independent Review identities");
 assert.doesNotMatch(reviewText, /Routine frontiers have no independent task Review/i,

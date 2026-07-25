@@ -5,31 +5,33 @@ description: Use when completing risk-gated work, closing reviewer findings, or 
 
 # Requesting Code Review
 
-Use independent review as a bounded risk gate, not an open-ended search for possible improvements.
+Use independent Review as a bounded gate, not an open-ended improvement search.
 
-**Core principle:** one declared review unit, one impact-qualified finding list, one bounded closure.
+**Core principle:** one declared identity, one impact-qualified finding list, one bounded closure.
 
 ## Route-Aware Review
 
 - **Micro:** no independent review. Focused verification is still mandatory.
-- **Standard:** use risk-gated review only when shared behavior, broad blast radius, ambiguous acceptance, or sensitive evidence makes independent judgment material.
-- **Full:** keep the mandatory final whole-change review. Add task-level review only for a contract spine or another boundary whose unresolved failure would make dependent work unsafe.
+- **Standard:** risk-gated Review for shared behavior, broad blast radius, ambiguous acceptance, or sensitive evidence; bind the named risk boundary.
+- **Full:** mandatory final whole-change Review; non-final Review only for a named protected contract identity unsafe for dependent work.
 
-Routine frontiers have no independent task Review; use self-review, L1/L2, and final Review.
+Routine packages have no independent Review; use self-review, package L1, milestone L2, and final Review.
 
 ## Review Budget
 
-Any independent agent asked to decide readiness, admission, acceptance, mandatory-rework, or integration belongs to the same bounded Review budget, whether named Reviewer, Oracle, analyst, or adjudicator. Calls from one declared packet collectively form one pass; an extra adjudication outside that packet consumes the next available pass, so renaming the role cannot create another gate.
+Any independent agent asked to decide readiness, admission, acceptance, mandatory-rework, or integration belongs to the same bounded Review budget, whether named Reviewer, Oracle, analyst, or adjudicator. Calls in one packet form one pass; an extra adjudication outside it consumes the next pass.
 
-Protected-contract and final whole-change Review permit:
+A Review identity is only a named protected contract identity or final whole change. A migration, split, rename, correction, or role change must not reset its Review budget or create a new Review identity.
 
-1. **One initial review** against declared acceptance and protected boundaries.
-2. **One consolidated correction frontier** when blockers are accepted.
+A protected-contract or final whole-change Review permits:
+
+1. **One initial review** against acceptance and protected boundaries.
+2. **One consolidated correction** when blockers are accepted.
 3. **One closure review** of initial findings, exact fix diff, and adjacent regressions.
 
-Send one packet per pass. When multiple perspectives are explicitly required, collect them in that packet and synthesize one finding list; do not serialize separate spec, privacy, test-quality, or style gates.
+Send one packet per pass. When multiple perspectives are required, combine them in one packet and synthesize one finding list; do not serialize spec, privacy, test-quality, or style gates.
 
-After closure, record new non-Critical findings not caused by the fix as deferred manifest risk for final Review. Reopen only for a demonstrated Critical regression, false disposition evidence, or explicit route escalation.
+After closure, record new non-Critical fix-unrelated findings as deferred final-Review risk. Reopen only for Critical regression, false disposition evidence, or explicit route escalation.
 
 ## Blocking-Finding Contract
 
@@ -63,8 +65,8 @@ The closure reviewer checks that scope only. It must not rediscover the whole ta
 
 Record exact `BASE_SHA` and `HEAD_SHA`; final review uses the branch start, not a relative one-commit shortcut. Include:
 
-- review-unit type: protected contract, frontier boundary, or final whole change;
-- current task card when a task/frontier boundary is reviewed;
+- Review identity: named protected contract identity or final whole change;
+- current task card for that protected-contract package;
 - approved authority and authority acceptance IDs;
 - protected boundaries and known risk;
 - exact diff and evidence paths appropriate to the gate;
@@ -79,7 +81,7 @@ Use [code-reviewer.md](code-reviewer.md) as the reviewer template.
 1. Reproduce or inspect each proposed blocker.
 2. Map it to the blocking-finding contract.
 3. Record controller disposition as `fix`, `defer`, or `reject` before editing.
-4. Make one consolidated correction frontier for accepted blockers.
+4. Make one consolidated correction for accepted blockers.
 5. Run focused evidence, then the single closure review.
 
 Critical findings block when confirmed. Only an impact-qualified Important finding may block; severity text alone never does.
