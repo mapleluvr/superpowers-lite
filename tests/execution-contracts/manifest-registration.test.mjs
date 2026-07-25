@@ -45,10 +45,21 @@ assert.ok(
   pkg.files.includes("docs/superpowers/specs/2026-07-22-progressive-sdd-workspace-design.md"),
   "the progressive workspace design linked by the packaged README must ship",
 );
+assert.ok(
+  pkg.files.includes("docs/superpowers/work/full-milestone-execution"),
+  "the milestone-execution authority linked by the packaged README must ship",
+);
+assert.ok(
+  pkg.files.includes("docs/superpowers/migrations/2026-07-25-temporary-full-milestone-workflow-migration.md"),
+  "the temporary safe-boundary migration guide linked by the packaged README must ship",
+);
 assert.match(readme, /Durable Authority.*Dynamic Frontier/is);
 assert.match(readme, /docs\/superpowers\/work\/<feature>/i);
 assert.match(readme, /\.superpowers\/work\/<run-id>/i);
-assert.match(readme, /current frontier/i);
+assert.match(readme, /current (?:frontier|milestone)/i);
+assert.match(readme, /user-visible milestone/i);
+assert.match(readme, /cohesive work package/i);
+assert.match(readme, /public (?:entry|Entrypoint)|controlled E2E/i);
 assert.match(readme, /net\s+benefit/i);
 assert.match(readme, /legacy.*(?:spec|plan).*compatible|compatible.*legacy.*(?:spec|plan)/is);
 assert.doesNotMatch(readme, /final-review ledger|fix wave|dependency graph with disjoint write sets/i);
@@ -60,15 +71,16 @@ assert.equal(pkg.scripts.test.split(aggregate).length - 1, 1,
   "package test must register the execution aggregate exactly once");
 
 assert.match(readme, /docs\/superpowers\/specs\/2026-07-19-fail-first-wave-execution-design\.md/);
-assert.match(readme, /at least two independently useful|two or more independently useful/i);
+assert.match(readme, /independently mergeable (?:enabling )?(?:work )?packages?/i);
+assert.doesNotMatch(readme, /two or more independently useful outcomes/i);
 assert.match(readme, /protected contract|contract spine/i);
 assert.match(readme, /patch handoff|worktree:\s*true/i);
 assert.match(readme, /(?:exact mutable resource identit|mutable resource[\s\S]{0,120}exact identit)/i);
 assert.match(readme, /post-apply L1[\s\S]{0,220}reverse[\s\S]{0,220}frontier L2[\s\S]{0,220}(?:without|do not)[\s\S]{0,100}reverse/i);
 assert.match(readme, /L0.*L1.*L2.*L3/is);
 assert.match(readme, /finalization-only L3|L3.*only.*finalization/is);
-assert.match(readme, /task-local checks passed/i);
-assert.match(readme, /affected closure passed/i);
+assert.match(readme, /package-local checks passed/i);
+assert.match(readme, /milestone (?:integrated )?affected closure passed/i);
 assert.match(readme, /repository-wide suite passed/i);
 
 console.log("execution manifest registration checks passed");

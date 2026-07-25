@@ -16,8 +16,12 @@ assert.match(skill, /frontier\.json/i, "SDD must consume the frontier executable
 assert.match(skill, /task cards?/i, "SDD workers must receive task cards");
 assert.doesNotMatch(skill, /(?:approved|implementation|executable) plan|task brief|authority brief|\.superpowers\/sdd\/progress\.md|duplicate progress ledger/i,
   "SDD must not consume plans, briefs, or a duplicate progress ledger");
-assert.match(skill, /two or more independently useful outcomes/i,
-  "parallel SDD must require independently useful outcomes");
+assert.match(skill, /independently mergeable (?:enabling )?(?:work )?packages?/i,
+  "parallel SDD must permit independently mergeable enabling packages");
+assert.match(skill, /need not be independently (?:user[- ]visible|useful to the user)|not independently (?:user[- ]visible|useful)/i,
+  "parallel packages need not each be standalone user outcomes");
+assert.doesNotMatch(skill, /two or more independently useful outcomes/i,
+  "parallel SDD must remove the micro-frontier predicate");
 assert.match(skill, /single canonical integrator/i, "one integrator must own canonical writes");
 assert.match(skill, /frozen (?:clean )?(?:frontier )?base/i, "parallel tasks must use one frozen clean base");
 assert.match(skill, /worktree:\s*true/i, "native Pi implementation workers must use isolated worktrees");
@@ -53,7 +57,8 @@ assert.match(skill, /(?:original|frozen|FRONTIER_BASE).{0,60}tree|tree.{0,60}(?:
   "failed-frontier recovery must prove the original tree");
 assert.match(skill, /without rewriting history|do not rewrite history/i,
   "recovery must use non-destructive history");
-assert.match(skill, /frontier L2/i, "successful frontiers must run affected-closure L2");
+assert.match(skill, /milestone (?:union )?L2/i,
+  "successful package integration must run milestone affected-closure L2");
 assert.match(skill, /repository-wide L3.*finalization|finalization.*repository-wide L3/is,
   "repository-wide L3 must be finalization-only");
 
@@ -90,12 +95,12 @@ assert.match(implementer, /passed L0 evidence|L0 evidence.*passed/i,
   "implementers must require controller-provided passing L0 evidence");
 assert.match(implementer, /L0 evidence.{0,120}(?:missing|mismatched).{0,180}(?:BLOCKED|NEEDS_CONTEXT)|(?:missing|mismatched).{0,120}L0 evidence.{0,180}(?:BLOCKED|NEEDS_CONTEXT)/is,
   "missing or mismatched L0 evidence must block implementation");
-assert.match(implementer, /exact declared L1/i,
-  "implementers must run only the declared task-local command");
+assert.match(implementer, /exact declared (?:package )?L1/i,
+  "implementers must run only the declared package-local command");
 assert.match(implementer, /must not run.*(?:package-wide|repository-wide)/is,
   "implementers must not run repository-wide suites");
-assert.match(implementer, /task-local checks passed/i,
-  "implementer claims must be scope-qualified");
+assert.match(implementer, /package-local checks passed/i,
+  "implementer claims must be package-scope-qualified");
 assert.doesNotMatch(implementer, /full suite once before committing/i,
   "legacy per-task full-suite guidance must be removed");
 

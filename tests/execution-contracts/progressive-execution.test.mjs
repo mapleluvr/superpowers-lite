@@ -30,16 +30,18 @@ assert.match(sdd, /local defect[\s\S]{0,180}correction frontier/i,
   "local defects must become correction frontiers");
 assert.match(sdd, /two rejected candidates[\s\S]{0,220}core-contract[\s\S]{0,220}re-?decomposition/i,
   "repeated core-contract failure must re-decompose before another attempt");
-assert.match(inline, /current tasks[\s\S]{0,160}in order/i,
-  "Inline must run only the current frontier tasks in order");
-assert.match(inline, /terminal frontier L2[\s\S]{0,120}exactly once after all current tasks/is,
-  "Inline must run one terminal frontier L2");
+assert.match(inline, /current work packages?[\s\S]{0,160}(?:declared )?order/i,
+  "Inline must run only the current milestone packages in order");
+assert.match(inline, /milestone (?:union )?L2[\s\S]{0,160}exactly once after all current (?:work )?packages/is,
+  "Inline must run one terminal milestone L2");
 assert.match(dispatch, /net benefit[\s\S]{0,180}(?:Inline fallback|fallback to Inline|choose Inline)/is,
   "Parallel dispatch must fall back to Inline when net benefit is unclear");
 
 assert.doesNotMatch(executionText, /\[BRIEF_FILE\]|task brief|authority brief|scripts\/task-brief|scripts\/review-package|\.superpowers\/sdd\/progress\.md|duplicate progress ledger/i,
   "execution consumers must not reference legacy brief helpers or duplicate ledgers");
 assert.doesNotMatch(sdd, /fix wave|final-review ledger/i,
-  "SDD finalization must use correction frontiers and manifest risk rather than old wave/ledger artifacts");
+  "SDD finalization must use identity-bound correction and manifest risk rather than old wave/ledger artifacts");
+assert.match([sdd, inline, dispatch].join("\n"), /public (?:entry|Entrypoint)|controlled E2E/i,
+  "milestone execution must terminate in public-entry or controlled E2E evidence");
 
 console.log("progressive execution consumer contract checks passed");

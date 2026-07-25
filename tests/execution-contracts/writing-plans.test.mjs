@@ -28,14 +28,19 @@ assert.match(skill, /(?:do not|never)[\s\S]{0,120}(?:copy|rename|migrate)[\s\S]{
   "legacy bootstrap must not copy or bulk-migrate legacy authority");
 assert.match(skill, /active legacy run[\s\S]{0,120}(?:unchanged|not migrated|do not migrate)/i,
   "active legacy runs must remain unchanged");
-assert.match(skill, /highest-value.*earliest verifiable frontier|earliest verifiable.*highest-value/is,
-  "planning must select the nearest high-value frontier");
-assert.match(skill, /current frontier/i,
-  "planning scope must be the current frontier");
+for (const field of ["acceptanceDelta", "publicEntrypoint", "terminalE2E", "observableSuccess", "consumedContracts", "laterExclusions", "workPackages", "plannedRounds"]) {
+  assert.match(skill, new RegExp(field, "i"), `current milestone must record ${field}`);
+}
+assert.match(skill, /current (?:runtime )?frontier.*milestone container|milestone container.*current (?:runtime )?frontier/is,
+  "the compatible current frontier must be one user-visible milestone");
+assert.match(skill, /largest cohesive boundary/i,
+  "planning must choose a cohesive package rather than the smallest unit");
+assert.doesNotMatch(skill, /Choose the smallest boundary/i,
+  "planning must not optimize for micro-frontiers");
 assert.match(skill, /does not.{0,100}(?:promise|precompute)|do not.{0,100}(?:promise|precompute)/i,
-  "writing-plans must not predict the full task graph");
-assert.match(skill, /task count|later (?:tasks|waves|frontiers)/i,
-  "the non-prediction rule must cover later work");
+  "writing-plans must not predict the full feature graph");
+assert.match(skill, /later milestone/i,
+  "the non-prediction rule must cover later milestones");
 
 for (const factor of [
   /disjoint.*(?:writes|paths).*mutable resources|mutable resources.*disjoint/is,
@@ -50,13 +55,16 @@ assert.match(skill, /(?:unclear|not clear).*(?:Inline|serial)|(?:Inline|serial).
   "uncertain parallel benefit must fall back to Inline");
 assert.match(skill, /qualitative.*(?:rationale|decision)|(?:rationale|decision).*qualitative/is,
   "parallel choice must use qualitative rationale rather than a score");
-assert.match(skill, /sole.*(?:worker|task-specific).*(?:instruction|authority)|task card.*sole/is,
-  "one task card must be the only task-specific worker authority");
+assert.match(skill, /sole.*(?:worker|package-specific).*(?:instruction|authority)|task card.*sole/is,
+  "one task card must be the only package-specific worker authority");
+assert.match(skill, /internal RED\/GREEN|RED\/GREEN iterations?[\s\S]{0,120}(?:without|do not)[\s\S]{0,120}(?:new|another)[\s\S]{0,80}frontier/i,
+  "package-internal TDD must not create controller frontiers");
 
 for (const check of [
   /authority.*(?:commit|hash)/is,
   /exactly one current frontier|one current frontier/i,
-  /later (?:task|wave|frontier).*(?:predicted|precomputed)|static.*(?:DAG|graph)/is,
+  /acceptanceDelta|publicEntrypoint|terminalE2E/i,
+  /later milestone.*(?:predicted|precomputed)|static.*(?:DAG|graph)/is,
   /parallel.*(?:independence|net benefit)/is,
   /L3.*finalization|finalization.*L3/is,
 ]) {

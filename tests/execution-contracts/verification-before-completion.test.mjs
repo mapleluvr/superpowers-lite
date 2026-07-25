@@ -6,8 +6,12 @@ const skill = readRepoFile("skills/verification-before-completion/SKILL.md");
 assert.match(skill, /NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE/);
 assert.match(skill, /identify.*scope.*tier|scope.*tier.*identify/is,
   "verification must identify claim scope and evidence tier first");
-assert.match(skill, /L1.*task-local checks passed/is);
-assert.match(skill, /L2.*affected closure passed/is);
+assert.match(skill, /L1.*package-local checks passed/is);
+assert.match(skill, /L2.*milestone (?:integrated )?affected closure passed/is);
+assert.match(skill, /L2[\s\S]{0,220}(?:public entry|publicEntrypoint|controlled E2E)/i,
+  "milestone L2 must bind public-entry or controlled E2E evidence");
+assert.match(skill, /(?:package L1|internal GREEN)[\s\S]{0,220}(?:cannot|must not|does not)[\s\S]{0,160}(?:milestone|acceptance)/i,
+  "package evidence must not support milestone completion");
 assert.match(skill, /L3.*repository-wide.*passed/is);
 for (const field of [/exact command/i, /exit code/i, /timestamp/i, /HEAD|tree identity/i, /dirty state/i]) {
   assert.match(skill, field, `evidence record must bind ${field}`);

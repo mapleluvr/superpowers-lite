@@ -29,8 +29,15 @@ for (const excluded of ["task lists", "DAGs", "waves", "implementation paths", "
 }
 assert.doesNotMatch(skill, /include a boundary map before approval/i,
   "durable specs must not require a complete implementation-unit boundary map");
-assert.match(skill, /writing-plans.*(?:initialize|create).*(?:ignored|\.superpowers\/work).*current frontier/is,
-  "approved authority must hand off to dynamic workspace initialization");
+assert.match(skill, /authority sufficien|sufficient authority/i,
+  "Full design must check existing authority before reopening decisions");
+assert.match(skill, /(?:sufficient|already approved)[\s\S]{0,220}(?:reuse|bind)[\s\S]{0,220}(?:writing-plans|execution)/i,
+  "sufficient authority must hand off without repeated approval");
+assert.match(skill, /(?:unresolved|missing)[\s\S]{0,180}(?:consolidated|single)[\s\S]{0,100}decision packet/i,
+  "only unresolved decisions should return in one decision packet");
+assert.doesNotMatch(skill, /This applies to EVERY project regardless of perceived simplicity/i);
+assert.match(skill, /writing-plans.*(?:initialize|create).*(?:ignored|\.superpowers\/work).*current (?:frontier|milestone)/is,
+  "approved authority must hand off to dynamic milestone initialization");
 
 for (const check of [
   /observable outcome/i,

@@ -6,7 +6,8 @@ const setup = readSection(skill, "Step 2: Project Setup");
 const baseline = readSection(skill, "Step 3: Record Selective Baseline");
 
 assert.ok(setup, "skill must define Step 2: Project Setup");
-assert.match(setup, /current frontier|frontier-declared/i, "setup must come from the current frontier");
+assert.match(setup, /current milestone|milestone-declared|current frontier/i,
+  "setup must come from the current milestone container");
 assert.doesNotMatch(setup, /plan-declared|approved plan/i, "setup must not depend on a static plan");
 assert.match(setup, /dependency-only/i, "setup must be classified as dependency-only");
 assert.match(setup, /lifecycle (?:hooks|scripts).*(?:disabled|suppressed)|(?:disabled|suppressed).*lifecycle (?:hooks|scripts)/is,
@@ -21,8 +22,8 @@ assert.ok(baseline, "skill must define Step 3: Record Selective Baseline");
 assert.match(baseline, /frozen base SHA/i);
 assert.match(baseline, /CI status/i);
 assert.match(baseline, /unknown/i, "missing CI must remain unknown");
-assert.match(baseline, /(?:current )?frontier.{0,100}(?:declared )?L0-L2|L0.*L2/is,
-  "baseline must run only current-frontier selective tiers");
+assert.match(baseline, /(?:current )?milestone.{0,100}(?:declared )?L0-L2|L0.*L2/is,
+  "baseline must run only current-milestone selective tiers");
 assert.doesNotMatch(baseline, /plan-declared|approved plan/i,
   "selective baseline must not depend on a static plan");
 assert.match(baseline, /selective baseline/i);

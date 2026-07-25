@@ -22,5 +22,11 @@ assert.match(planning, /authority.*(?:change|hash).*(?:invalidate|stop)|(?:inval
   "authority changes must invalidate derived work");
 assert.match(planning, /task decomposition.*(?:does not|is not).*(?:amend|authority)|(?:does not|is not).*authority.*task decomposition/is,
   "runtime task decomposition must remain outside durable authority");
+assert.match(planning, /current (?:runtime )?frontier.*milestone container|milestone container.*current (?:runtime )?frontier/is,
+  "the runtime frontier must now be a user-visible milestone container");
+assert.match(planning, /largest cohesive boundary/i,
+  "derived work must use cohesive packages rather than micro-frontiers");
+assert.match(planning, /no later milestone|do not (?:predict|precompute)[\s\S]{0,120}later milestone/i,
+  "planning must retain milestone-local rather than feature-wide lookahead");
 
 console.log("progressive workspace integration contract checks passed");

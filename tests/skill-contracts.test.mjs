@@ -96,21 +96,19 @@ if (!ROUTER_ONLY) {
     "brainstorming must target Full or substantive design work",
   );
   assert.doesNotMatch(brainstorming.frontmatter, /before any creative work/i);
-  assert.match(
-    brainstorming.body,
-    /Use this skill for Full-route work, unresolved product or architecture\s+choices, or an explicit brainstorming request\. When invoked, its Full design\s+and approval gates remain mandatory\./,
-  );
+  assert.match(brainstorming.body, /authority sufficien|sufficient authority/i,
+    "brainstorming must check existing approved authority before reopening design");
   for (const anchor of [
     "<HARD-GATE>",
-    "This applies to EVERY project regardless of perceived simplicity.",
     "## Checklist",
     "Write durable authority",
-    "User reviews written authority",
+    "consolidated decision packet",
     "The terminal state is invoking writing-plans.",
     "docs/superpowers/work/<feature>/",
   ]) {
     assert.ok(brainstorming.body.includes(anchor), `brainstorming must retain ${anchor}`);
   }
+  assert.doesNotMatch(brainstorming.body, /This applies to EVERY project regardless of perceived simplicity/i);
 
   const writingPlans = splitFrontmatter(readSkill("writing-plans"));
   assert.match(writingPlans.frontmatter, /Full-route work/i, "writing-plans must be Full-only");
@@ -121,6 +119,10 @@ if (!ROUTER_ONLY) {
     "frontier.json",
     "task card",
     "selective baseline",
+    "acceptanceDelta",
+    "publicEntrypoint",
+    "terminalE2E",
+    "workPackages",
     "Self-Review",
   ]) {
     assert.ok(writingPlans.body.includes(anchor), `writing-plans must retain ${anchor}`);
@@ -185,23 +187,27 @@ if (!ROUTER_ONLY) {
   assert.ok(sdd.body.includes("## Risk-Gated Task Review"));
   for (const anchor of [
     "manifest.json",
-    "current frontier",
+    "current milestone",
     "task card",
+    "work package",
+    "package L1",
+    "milestone L2",
+    "public entry",
     "one structured record per gate",
     "public/shared contracts",
     "security",
     "migrations",
     "concurrency",
     "high blast radius",
-    "routine tasks do not dispatch a task reviewer",
+    "routine packages do not dispatch",
     "implementer tests",
     "self-review",
     "final whole-branch review",
-    "one consolidated correction frontier",
+    "one consolidated correction",
   ]) {
     assert.match(sdd.body, new RegExp(anchor, "i"), `SDD must retain ${anchor}`);
   }
-  assert.match(sdd.body, /task-level.*risk|risk.*task-level/i);
+  assert.match(sdd.body, /package-level.*risk|risk.*package-level/i);
   assert.doesNotMatch(sdd.body, /task brief|authority brief|\.superpowers\/sdd\/progress\.md|duplicate progress ledger|fix wave/i);
 }
 

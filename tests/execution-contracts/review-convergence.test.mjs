@@ -30,12 +30,12 @@ for (const [label, content] of reviewConsumers) {
     `${label} must not reference unavailable task-brief/review-package helpers`);
 }
 
-assert.match(reviewSkill, /Routine frontiers have no independent task Review/i,
-  "routine frontiers must not dispatch independent task Review");
+assert.match(reviewSkill, /Routine (?:work )?packages have no independent Review/i,
+  "routine work packages must not dispatch independent Review");
 assert.match(reviewSkill, /protected[- ]contract.*final (?:whole[- ]change )?Review.*one initial.*one closure/is,
   "protected-contract and final Review must retain initial + one closure semantics");
-assert.match(taskReviewerPrompt, /protected contract or frontier boundary/i,
-  "task/frontier reviewer must be reserved for protected boundaries");
+assert.match(taskReviewerPrompt, /named protected contract|protected contract (?:ID|identity)/i,
+  "non-final package review must bind a named protected-contract identity");
 
 for (const [label, content] of reviewConsumers) {
   assert.match(content, /acceptanceId|authority acceptance IDs?|protected boundary/i,
