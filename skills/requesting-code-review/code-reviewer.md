@@ -1,6 +1,6 @@
 # Code Reviewer Prompt Template
 
-Use for bounded Review. Standard covers its named risk boundary. Full non-final Review covers only a named protected contract; routine packages have no independent Review and use self-review, package L1, milestone L2, and final Review. A migration, split, rename, correction, or role change must not reset a Review budget or identity.
+Use for bounded Review. Standard uses a named risk boundary; Full non-final uses a named protected contract. Routine Full packages have no independent Review; use self-review, package L1, milestone L2, and final Review. Migration, split, rename, correction, or role change cannot reset budget or identity.
 
 ```text
 Subagent (general-purpose):
@@ -15,7 +15,7 @@ Subagent (general-purpose):
 
     ## Review Identity
 
-    Review identity: [named protected contract identity | final whole change]
+    Review identity: [named Standard risk boundary | named Full protected contract identity | final whole change]
     Pass: [initial | closure]
     Current task card: [TASK_CARD_PATH or n/a]
     Authority acceptance IDs / protected boundaries: [LIST]

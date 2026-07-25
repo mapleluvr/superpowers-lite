@@ -19,11 +19,11 @@ Routine packages have no independent Review; use self-review, package L1, milest
 
 ## Review Budget
 
-Any independent agent asked to decide readiness, admission, acceptance, mandatory-rework, or integration belongs to the same bounded Review budget, whether named Reviewer, Oracle, analyst, or adjudicator. Calls in one packet form one pass; an extra adjudication outside it consumes the next pass.
+Any agent deciding readiness, admission, acceptance, mandatory rework, or integration shares that identity's same bounded Review budget, whether named Reviewer, Oracle, analyst, or adjudicator. Calls in one packet form one pass; an outside adjudication consumes the next pass.
 
-A Review identity is only a named protected contract identity or final whole change. A migration, split, rename, correction, or role change must not reset its Review budget or create a new Review identity.
+A Standard Review identity is its named risk boundary. A Full identity is a named protected contract or final whole change. Migration, split, rename, correction, or role change must not reset its budget or create a new identity.
 
-A protected-contract or final whole-change Review permits:
+Every Standard-risk, protected-contract, or final whole-change identity permits:
 
 1. **One initial review** against acceptance and protected boundaries.
 2. **One consolidated correction** when blockers are accepted.
@@ -65,8 +65,8 @@ The closure reviewer checks that scope only. It must not rediscover the whole ta
 
 Record exact `BASE_SHA` and `HEAD_SHA`; final review uses the branch start, not a relative one-commit shortcut. Include:
 
-- Review identity: named protected contract identity or final whole change;
-- current task card for that protected-contract package;
+- Review identity: named Standard risk boundary, named Full protected contract identity, or final whole change;
+- current task card when present;
 - approved authority and authority acceptance IDs;
 - protected boundaries and known risk;
 - exact diff and evidence paths appropriate to the gate;

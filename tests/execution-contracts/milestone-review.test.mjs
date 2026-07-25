@@ -12,7 +12,7 @@ for (const content of [review, reviewer, protectedReviewer]) {
     "non-final Review must bind one named protected-contract identity");
   assert.match(content, /final whole[- ]change/i,
     "the final whole change must remain a Review identity");
-  assert.match(content, /routine (?:work )?packages?[\s\S]{0,180}no independent Review|no independent Review[\s\S]{0,180}routine (?:work )?packages?/i,
+  assert.match(content, /routine (?:(?:Full|work) )?packages?[\s\S]{0,180}no independent Review|no independent Review[\s\S]{0,180}routine (?:(?:Full|work) )?packages?/i,
     "routine packages must not receive independent Review");
   assert.match(content, /(?:migration|package split|frontier (?:slug|rename)|correction|role renam)[\s\S]{0,260}(?:does not|must not|cannot)[\s\S]{0,120}(?:reset|create)[\s\S]{0,100}(?:Review )?(?:budget|unit|identity)/i,
     "representation changes must not mint a new Review budget");
@@ -22,6 +22,12 @@ assert.match(review, /one initial review[\s\S]{0,180}one consolidated correction
   "each protected/final Review identity must remain bounded");
 assert.match(review, /Standard[\s\S]{0,180}(?:risk-gated|risk boundary|shared behavior)/i,
   "Standard must retain its risk-gated non-final Review path");
+assert.match(review, /Standard Review identity[\s\S]{0,100}named risk boundary|named risk boundary[\s\S]{0,100}Standard Review identity/i,
+  "Standard must be able to bind a conforming named-risk Review identity");
+assert.match(review, /(?:Standard-risk|Standard risk)[\s\S]{0,120}(?:protected-contract|protected contract)[\s\S]{0,120}final whole[- ]change[\s\S]{0,220}one initial review[\s\S]{0,180}one consolidated correction[\s\S]{0,180}one closure review/i,
+  "Standard, protected-contract, and final identities must share the bounded pass semantics");
+assert.match(reviewer, /Review identity:\s*\[named Standard risk boundary\s*\|\s*named Full protected contract identity\s*\|\s*final whole change\]/i,
+  "the shared reviewer packet must accept a Standard named-risk identity");
 assert.doesNotMatch(reviewText, /review-unit type: protected contract, frontier boundary/i,
   "ordinary frontier boundaries must not be independent Review identities");
 assert.doesNotMatch(reviewText, /Routine frontiers have no independent task Review/i,

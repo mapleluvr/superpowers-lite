@@ -27,6 +27,10 @@ assert.match(skill, /single canonical integrator/i, "one integrator must own can
 assert.match(skill, /MILESTONE_BASE/i, "recovery must bind one clean milestone base");
 assert.match(skill, /ROUND_BASE/i, "each round must bind one clean dispatch base");
 assert.match(skill, /planned rounds sequentially/i, "dependent rounds must execute sequentially");
+assert.match(skill, /no dependency path[\s\S]{0,120}(?:same|one|current)[- ](?:dispatched )?round|(?:same|one|current)[- ](?:dispatched )?round[\s\S]{0,120}no dependency path/i,
+  "only packages inside one dispatched round must be dependency-independent");
+assert.doesNotMatch(skill, /no same-current-milestone dependency path/i,
+  "planned later rounds may depend on prior-round outputs");
 assert.match(skill, /worktree:\s*true/i, "native Pi implementation workers must use isolated worktrees");
 assert.match(skill, /native.*handoff.*patch|native.*patch handoff/is,
   "native worktree output must be treated as a patch handoff");

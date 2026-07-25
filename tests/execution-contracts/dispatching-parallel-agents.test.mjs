@@ -22,7 +22,7 @@ assert.match(skill, /Inline fallback|fallback to Inline|choose Inline/i,
 for (const predicate of [
   /immutable inputs|pinned contract/i,
   /disjoint (?:write|owns)/i,
-  /no (?:same-frontier )?dependency path/i,
+  /no dependency path.*(?:same|one|current)[- ](?:dispatched )?round|(?:same|one|current)[- ](?:dispatched )?round.*no dependency path|no dependency path.*dispatched group/i,
   /isolated mutable resources/i,
 ]) {
   assert.match(skill, predicate, `independence predicate must include ${predicate}`);

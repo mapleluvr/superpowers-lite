@@ -16,7 +16,7 @@ Dispatch one agent per independent problem domain with focused, self-contained c
 Implementation dispatch starts from `.superpowers/work/<run-id>/manifest.json`, its exactly one current frontier acting as the current milestone, and that milestone's task cards. Independently mergeable enabling work packages may share a milestone even though they need not be independently user-visible or useful to the user. All must be true:
 
 - they consume the same immutable inputs or pinned contract versions, with frozen consumed interfaces;
-- there is no same-frontier dependency path between them;
+- there is no dependency path inside the same dispatched round or group;
 - they have disjoint writes or disjoint `owns` paths;
 - mutable resources such as ports, databases, generated files, settings, and fixtures are isolated;
 - each has independent package L1;
@@ -62,7 +62,7 @@ Issue independent calls in one parallel group and set concurrency appropriate to
 When results return:
 
 - require every expected result and evidence artifact;
-- keep failed or unresolved frontiers quarantined;
+- keep failed or unresolved packages quarantined;
 - synthesize read-only findings in the controller;
 - route implementation patches through SDD admission;
 - report only the verification scope actually established.

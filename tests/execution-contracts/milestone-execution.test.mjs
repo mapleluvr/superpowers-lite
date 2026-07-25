@@ -49,6 +49,10 @@ for (const content of [sdd, dispatch]) {
     "parallel work may include independently mergeable enabling packages");
   assert.match(content, /need not be independently (?:user[- ]visible|useful to the user)|not independently (?:user[- ]visible|useful)/i,
     "parallel packages need not each be standalone user features");
+  assert.match(content, /no dependency path[\s\S]{0,120}(?:same|one|current)[- ](?:dispatched )?round|(?:same|one|current)[- ](?:dispatched )?round[\s\S]{0,120}no dependency path|no dependency path[\s\S]{0,120}dispatched group/i,
+    "parallel independence must be scoped to one dispatched round or group");
+  assert.doesNotMatch(content, /no same-current-milestone dependency path|no same-frontier dependency path/i,
+    "cross-round dependencies must not be mistaken for same-group parallel dependencies");
   assert.doesNotMatch(content, /two or more independently useful outcomes/i,
     "the old independently-useful-outcome predicate must be removed");
 }
