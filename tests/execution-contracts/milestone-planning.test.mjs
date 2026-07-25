@@ -34,7 +34,7 @@ for (const field of [
   "consumedContracts",
   "laterExclusions",
   "workPackages",
-  "plannedRounds",
+  "plannedRoundCount",
 ]) {
   assert.match(planning, new RegExp(field, "i"), `current milestone must record ${field}`);
 }

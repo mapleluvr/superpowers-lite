@@ -19,6 +19,14 @@ for (const [label, content] of [["SDD", sdd], ["Inline", inline]]) {
     `${label} milestone L2 must exercise the public entry or controlled E2E`);
   assert.match(content, /(?:package L1|internal GREEN)[\s\S]{0,200}(?:cannot|must not|does not)[\s\S]{0,160}(?:complete|prove)[\s\S]{0,80}milestone/i,
     `${label} must prohibit internal evidence from claiming milestone completion`);
+  assert.match(content, /local (?:package )?defect[\s\S]{0,220}(?:stays|remains)[\s\S]{0,100}(?:same|current)[\s\S]{0,80}milestone/i,
+    `${label} must keep local corrections inside the current milestone`);
+  assert.match(content, /correction (?:work )?package|package correction round/i,
+    `${label} must represent a local correction as milestone-local package work`);
+  assert.doesNotMatch(content, /local defect[^\n]{0,160}creates a correction frontier/i,
+    `${label} must not mint a new frontier for a local defect`);
+  assert.doesNotMatch(content, /contract\/probe milestone/i,
+    `${label} must keep a prerequisite probe as a package linked to the blocked public path`);
 }
 
 assert.match(sdd, /Full.*feature[- ]level assurance|feature[- ]level assurance.*Full/is,
