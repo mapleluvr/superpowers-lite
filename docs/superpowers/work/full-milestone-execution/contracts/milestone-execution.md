@@ -33,9 +33,14 @@ terminalE2E
 observableSuccess
 consumedContracts
 laterExclusions
-workPackages
-plannedRounds
+plannedRoundCount
+workPackages[].id
+workPackages[].executionTier
+workPackages[].round
+workPackages[].taskCard
 ```
+
+`plannedRoundCount` is an integer from one through three. Every `workPackages` entry binds one package ID, execution tier, round in that range, and task-card path. Each package appears once and every declared round contains at least one package.
 
 A milestone is valid only when its terminal evidence can move an approved acceptance ID through a real public command, API, user workflow, or controlled effect. An internal capability may be a milestone only when it is itself a necessary shared protected contract with named consumers.
 
@@ -61,7 +66,7 @@ Round 2: public integration and terminal controlled E2E
 Round 3: one unavoidable remaining dependency layer when needed
 ```
 
-These counts shape planning; this contract defines no Leave-Undo or automatic action when a milestone stalls. A stalled state requires an explicit process decision and cannot silently rename or extend itself.
+The package-to-round mapping is complete before dispatch; dependencies may cross rounds but never exist inside a parallel dispatched group. These counts shape planning; this contract defines no Leave-Undo or automatic action when a milestone stalls. A stalled state requires an explicit process decision and cannot silently rename or extend itself.
 
 ## Parallel Predicate
 

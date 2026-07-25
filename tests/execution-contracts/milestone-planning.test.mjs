@@ -48,6 +48,8 @@ assert.match(planning, /(?:two to four|2[-–]4)[\s\S]{0,100}(?:work )?packages/
   "a milestone should normally contain a small package set");
 assert.match(planning, /(?:one to three|1[-–]3)[\s\S]{0,100}(?:execution )?rounds/i,
   "planning must use bounded milestone-local lookahead");
+assert.match(planning, /workPackages[\s\S]{0,220}executionTier[\s\S]{0,120}round|work package[\s\S]{0,180}execution tier[\s\S]{0,120}round/i,
+  "each work package must map its execution tier and planned round");
 assert.match(planning, /package[\s\S]{0,160}(?:related|multiple)[\s\S]{0,160}(?:source|production)[\s\S]{0,120}test/i,
   "one cohesive package may span related production and test files");
 assert.match(planning, /internal RED\/GREEN|RED\/GREEN iterations?[\s\S]{0,120}(?:without|do not)[\s\S]{0,120}(?:new|another)[\s\S]{0,80}frontier/i,

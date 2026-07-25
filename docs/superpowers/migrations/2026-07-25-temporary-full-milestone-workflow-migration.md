@@ -182,15 +182,35 @@ Treat the current frontier as the milestone container and add fields while prese
   "terminalE2E": "controlled target/decoy region capture",
   "plannedRoundCount": 2,
   "workPackages": [
-    "filesystem-safety",
-    "capture-admission",
-    "windows-capture-adapter",
-    "archive-live-cli-integration"
+    {
+      "id": "filesystem-safety",
+      "executionTier": "protected-contract",
+      "round": 1,
+      "taskCard": "tasks/P001-filesystem-safety.md"
+    },
+    {
+      "id": "capture-admission",
+      "executionTier": "isolated-parallel",
+      "round": 1,
+      "taskCard": "tasks/P002-capture-admission.md"
+    },
+    {
+      "id": "windows-capture-adapter",
+      "executionTier": "isolated-parallel",
+      "round": 1,
+      "taskCard": "tasks/P003-windows-capture-adapter.md"
+    },
+    {
+      "id": "archive-live-cli-integration",
+      "executionTier": "routine-inline",
+      "round": 2,
+      "taskCard": "tasks/P004-archive-live-cli-integration.md"
+    }
   ]
 }
 ```
 
-Use current task cards for packages, but broaden them to cohesive boundaries instead of one card per parser, record, or helper function. Do not add a static feature DAG, `progress.md`, duplicate authority, or separate migration ledger.
+Map every package exactly once to an execution tier, a round from one through `plannedRoundCount`, and its current task card. Every declared round has at least one package. Broaden task cards to cohesive boundaries instead of one card per parser, record, or helper function. Do not add a static feature DAG, `progress.md`, duplicate authority, or separate migration ledger.
 
 ### 7. Run Migration L0
 

@@ -50,7 +50,7 @@ An approved legacy spec or plan may initialize one new run only at an explicit s
 
 Trace the complete current-milestone path from the public entry point to its terminal observable result before decomposition. Choose the largest cohesive boundary that one writer can implement, self-review, and prove with package L1. Normally cluster two to four work packages in one to three execution rounds. These are package rounds inside the one current frontier, not new milestones: no later milestone is precomputed, and internal RED/GREEN iterations occur without creating another frontier.
 
-The compatible current runtime frontier remains the milestone container. In addition to existing identity, ownership, resource, and gate fields, it records `acceptanceDelta`, `publicEntrypoint`, `terminalE2E`, `observableSuccess`, `consumedContracts`, `laterExclusions`, `workPackages`, and `plannedRoundCount`.
+The compatible current runtime frontier remains the milestone container. In addition to existing identity, ownership, resource, and gate fields, it records `acceptanceDelta`, `publicEntrypoint`, `terminalE2E`, `observableSuccess`, `consumedContracts`, `laterExclusions`, `workPackages`, and `plannedRoundCount`. Every `workPackages` entry binds one package `id`, `executionTier`, `round` from one through `plannedRoundCount`, and task-card path; every package appears once and every declared round is non-empty.
 
 `frontier.md` answers:
 
@@ -87,6 +87,7 @@ The task card is the sole package-specific worker instruction. It records:
 
 ```text
 Observable outcome
+Package ID, execution tier, and planned round
 Frozen base
 Authority and contract hashes
 Owned paths

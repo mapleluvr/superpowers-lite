@@ -1,4 +1,4 @@
-# Current Frontier Review Prompt
+# Current Milestone Review Prompt
 
 Routine milestone derivation uses controller self-review. Use an independent reviewer only when a named protected-contract readiness decision already has Review budget; the call counts as a Review pass.
 
@@ -8,7 +8,8 @@ Review [RUN_MANIFEST] and its current frontier milestone container read-only aga
 Block only when:
 - the authority commit/hash is missing, stale, or unapproved;
 - manifest does not identify exactly one current frontier;
-- the milestone omits `acceptanceDelta`, `publicEntrypoint`, `terminalE2E`, `observableSuccess`, consumed contracts, later exclusions, cohesive work packages, or planned rounds;
+- the milestone omits `acceptanceDelta`, `publicEntrypoint`, `terminalE2E`, `observableSuccess`, consumed contracts, later exclusions, cohesive `workPackages`, or `plannedRoundCount`;
+- a package lacks a unique ID, execution tier, in-range round, or task-card mapping, or a declared round is empty;
 - current ownership or mutable resources overlap;
 - a mandatory acceptance/path lacks an owner, real entry point, or focused command;
 - Parallel lacks demonstrated independence or net benefit;
@@ -18,7 +19,7 @@ Block only when:
 - a hidden dependency, placeholder, or invalidation is ignored.
 
 Output:
-## Frontier Review
+## Milestone Review
 **Status:** Approved | Issues Found
 **Issues:** [acceptance ID/task, defect, execution consequence]
 **Recommendations:** [non-blocking only]
