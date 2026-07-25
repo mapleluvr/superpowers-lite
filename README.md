@@ -45,6 +45,25 @@ A user may request a route. New risk can escalate a task, but the workflow never
 silently downgrades after implementation starts. Verification is mandatory on
 all routes.
 
+## Full Workflow at a Glance
+
+Full is feature-level assurance with proportional package execution:
+
+```text
+reuse or approve durable authority
+  -> derive one user-visible milestone
+  -> execute 2-4 cohesive packages over 1-3 sequential rounds
+  -> run package L1 and one public-entry milestone L2
+  -> derive the next milestone from the new canonical state
+  -> run finalization-only L3 and final whole-change Review
+```
+
+Rounds may depend on earlier rounds; parallel packages inside one round must be
+independent. Routine packages use self-review and L1/L2. Only a named protected
+contract receives non-final Full Review. A stalled milestone has no automatic
+Leave-Undo, discard, revert, rename, or budget extension. Existing runs switch
+only at an explicit safe boundary through the [temporary migration guide](docs/superpowers/migrations/2026-07-25-temporary-full-milestone-workflow-migration.md).
+
 ## Durable Authority and Dynamic Frontiers
 
 The [Full milestone-execution authority](docs/superpowers/work/full-milestone-execution/README.md)
