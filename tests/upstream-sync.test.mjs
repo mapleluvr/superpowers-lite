@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync, execFileSync } from "node:child_process";
 import {
+  chmodSync,
   mkdtempSync,
   mkdirSync,
   readFileSync,
@@ -63,6 +64,11 @@ function initializeGit(directory) {
   git(directory, "config", "user.email", "tests@example.invalid");
 }
 
+function markExecutable(directory, relativePath) {
+  git(directory, "update-index", "--chmod=+x", relativePath);
+  if (process.platform !== "win32") chmodSync(path.join(directory, relativePath), 0o755);
+}
+
 function seedManifest(expectedUpstream) {
   writeFileSync(manifestPath, `${JSON.stringify({
     ...expectedUpstream,
@@ -82,8 +88,10 @@ try {
   write(sourceDir, "skills/bin/tool.sh", "#!/usr/bin/env bash\necho tool\n");
   write(sourceDir, "skills/using-superpowers/references/host-tools.md", "# Host mapping\n");
   git(sourceDir, "add", ".");
-  git(sourceDir, "update-index", "--chmod=+x", "skills/bin/tool.sh");
+  markExecutable(sourceDir, "skills/bin/tool.sh");
   git(sourceDir, "commit", "-qm", "fixture source");
+  assert.equal(git(sourceDir, "status", "--porcelain", "--untracked-files=no"), "",
+    "source fixture must begin with clean tracked content and modes");
   git(sourceDir, "tag", tag);
   git(sourceDir, "remote", "add", "origin", repository);
   const commit = git(sourceDir, "rev-parse", "HEAD");
@@ -99,7 +107,7 @@ try {
     write(packageDir, relativePath, readFileSync(path.join(sourceDir, relativePath)));
   }
   git(packageDir, "add", ".");
-  git(packageDir, "update-index", "--chmod=+x", "skills/bin/tool.sh");
+  markExecutable(packageDir, "skills/bin/tool.sh");
   git(packageDir, "commit", "-qm", "fixture package");
   seedManifest(expectedUpstream);
 
