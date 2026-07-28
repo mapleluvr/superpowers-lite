@@ -12,7 +12,7 @@ assert.match(routing, /Full.*feature[- ]level assurance|feature[- ]level assuran
   "Full must be the feature assurance level rather than every internal package's process tier");
 assert.match(routing, /(?:routine inline|Standard package)[\s\S]{0,180}protected[\s\S]{0,180}(?:isolated )?parallel/i,
   "Full must permit proportional internal package execution tiers");
-assert.match(routing, /(?:package|internal work)[\s\S]{0,180}(?:does not|must not)[\s\S]{0,120}(?:weaken|remove)[\s\S]{0,160}(?:L3|final whole-change Review)/i,
+assert.match(routing, /(?:package|internal work)[\s\S]{0,180}(?:does not|must not)[\s\S]{0,120}(?:weaken|remove)[\s\S]{0,160}(?:L3|final whole-change Review)|none weakens[\s\S]{0,80}final gates/i,
   "lower package ceremony must preserve feature-level final assurance");
 
 assert.match(brainstorming, /authority sufficien|sufficient authority/i,

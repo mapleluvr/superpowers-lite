@@ -1,12 +1,14 @@
 # Routing Evaluation
 
-This evaluation compares the pinned upstream Superpowers v6.1.1 skillset with
-Pi Superpowers Lite before active settings are migrated.
+This optional host-level evaluation compares the pinned upstream Superpowers
+v6.2.0 skillset with Superpowers Lite. The execution protocol below uses Pi as a
+fixed evaluation runner for reproducibility; Pi is not a runtime dependency or a
+compatibility layer supplied by the package.
 
 ## Protocol
 
 Run every fixture in `routing-cases.json` in a fresh context twice: first against
-upstream v6.1.1, then against Lite. Use the same model, model version, sampling
+upstream v6.2.0, then against Lite. Use the same model, model version, sampling
 settings, user prompt, and evaluator instructions for both targets. Do not reuse
 conversation state between cases or targets.
 

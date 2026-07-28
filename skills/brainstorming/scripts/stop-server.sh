@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Stop the brainstorm server and clean up
-# Usage: stop-server.sh <session_dir>
+# Usage: bash stop-server.sh <session_dir>
 #
 # Kills the server process. Only deletes session directory if it's
 # under /tmp (ephemeral). Persistent directories (.superpowers/) are
@@ -9,7 +9,7 @@
 SESSION_DIR="$1"
 
 if [[ -z "$SESSION_DIR" ]]; then
-  echo '{"error": "Usage: stop-server.sh <session_dir>"}'
+  echo '{"error": "Usage: bash stop-server.sh <session_dir>"}'
   exit 1
 fi
 

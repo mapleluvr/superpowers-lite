@@ -41,7 +41,7 @@ assert.match(sdd, /process[\s\S]{0,80}planned rounds sequentially/i,
   "SDD must process dependent rounds sequentially");
 assert.match(sdd, /MILESTONE_BASE[\s\S]{0,240}ROUND_BASE/i,
   "SDD must separate milestone recovery identity from each round dispatch base");
-assert.match(sdd, /current round[\s\S]{0,180}native parallel group|native parallel group[\s\S]{0,180}current round/i,
+assert.match(sdd, /Before each round[\s\S]{0,100}ROUND_BASE[\s\S]{0,160}Dispatch eligible packages concurrently[\s\S]{0,120}host-provided isolated workspace/i,
   "SDD must parallelize packages within one eligible round rather than across dependencies");
 
 for (const content of [sdd, dispatch]) {

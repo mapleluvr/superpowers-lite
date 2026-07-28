@@ -1,17 +1,17 @@
 ---
 name: executing-plans
-description: Use when approved Full work must execute the current dynamic milestone inline in this session
+description: Use when approved Full work must execute a milestone inline
 ---
 
 # Executing Plans
 
-Execute Full inline. Use `subagent-driven-development` for profitable parallel packages.
+Execute Full inline; use `subagent-driven-development` for parallel packages. Require independent final-review capability before execution; otherwise stop.
 
 ## Load Manifest
 
-Read `.superpowers/work/<run-id>/manifest.json`; verify authority, canonical identity, history, risks, and finalization.
+Read `.superpowers/work/<run-id>/manifest.json`; verify authority, identity, history, risks, and finalization.
 
-Exactly one current frontier is the milestone. Load its Markdown and JSON records, task cards, L0/package L1/milestone union L2, public entrypoint, terminal controlled E2E, and deferred effects.
+Exactly one current frontier is the milestone. Load its Markdown and JSON records, task cards, L0, package L1, milestone union L2, public entrypoint, controlled E2E, and deferred effects.
 
 When `currentFrontier` is null, require `finalization.status` to be `ready`, all history completed or superseded, no blocked milestone or protected risk, and latest L2 bound to clean canonical state. Only then enter finalization; otherwise stop. Never fabricate or reopen a milestone.
 
@@ -34,6 +34,6 @@ A hidden dependency invalidates the package map; stop and rederive this mileston
 
 ## Finalization
 
-From a proven finalization-ready manifest, run or reuse a valid L3 evidence record, mandatory final whole-change review, and material-invalidation handling before live effects. Then invoke `finishing-a-development-branch`.
+From a finalization-ready manifest, require a valid L3 evidence record, mandatory whole-change Review, and material-invalidation handling before live effects. Then invoke `finishing-a-development-branch`.
 
 Stop for stale identity, blockers, unavailable evidence, ownership collision, or decisions requiring approval. Never widen scope to continue.

@@ -7,8 +7,8 @@ const planning = readRepoFile("skills/writing-plans/SKILL.md");
 
 assert.match(routing, /docs\/superpowers\/work\/<feature>|durable authority/i,
   "Full routing must name the durable-authority handoff");
-assert.match(routing, /\.superpowers\/work\/<run-id>|dynamic (?:workspace|frontier)/i,
-  "Full routing must name the derived runtime workspace");
+assert.match(planning, /\.superpowers\/work\/<run-id>|dynamic (?:workspace|frontier)/i,
+  "Full planning must name the derived runtime workspace");
 assert.doesNotMatch(routing, /intent-level plan/i,
   "Full routing must not require a committed intent-level implementation plan");
 

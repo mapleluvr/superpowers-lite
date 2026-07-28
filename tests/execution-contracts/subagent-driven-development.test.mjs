@@ -31,9 +31,12 @@ assert.match(skill, /no dependency path[\s\S]{0,120}(?:same|one|current)[- ](?:d
   "only packages inside one dispatched round must be dependency-independent");
 assert.doesNotMatch(skill, /no same-current-milestone dependency path/i,
   "planned later rounds may depend on prior-round outputs");
-assert.match(skill, /worktree:\s*true/i, "native Pi implementation workers must use isolated worktrees");
-assert.match(skill, /native.*handoff.*patch|native.*patch handoff/is,
-  "native worktree output must be treated as a patch handoff");
+assert.match(skill, /host-provided isolated workspace/i,
+  "implementation workers must use host-provided isolation");
+assert.doesNotMatch(skill, /worktree:\s*true|failFast|native Pi/i,
+  "SDD must not depend on one host's dispatch schema");
+assert.match(skill, /host-native patch capture[\s\S]{0,160}handoff is a \*\*patch\*\*/i,
+  "isolated worker output must be treated as a patch handoff");
 
 for (const preflight of [
   /non-empty.*patch|patch.*non-empty/i,

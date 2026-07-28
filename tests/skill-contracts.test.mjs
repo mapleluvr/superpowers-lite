@@ -34,37 +34,40 @@ function assertRequiredFixture(routeCases, fixture) {
 }
 
 const usingSuperpowers = readSkill("using-superpowers");
-const { body: routerBody } = splitFrontmatter(usingSuperpowers);
+const { frontmatter: routerFrontmatter, body: routerBody } = splitFrontmatter(usingSuperpowers);
 
-for (const anchor of [
-  "Route: Micro",
-  "Route: Standard",
-  "Route: Full",
-  "Intent:",
-  "Constraints:",
-  "Acceptance:",
-  "Risk:",
+assert.match(routerFrontmatter, /description:.*Micro.*Standard.*Full/i,
+  "router description must expose all route names for native discovery");
+assert.match(routerBody, /on-demand skill pack/i);
+assert.match(routerBody, /does not inject this router or register tools/i);
+assert.match(routerBody, /host's native skill mechanism/i);
+assert.match(routerBody, /Never assume that a tool named `Skill` exists/i);
+
+const micro = section(routerBody, "Micro");
+assert.match(micro, /no behavior/i, "Micro must prohibit new behavior");
+assert.match(micro, /Do not create a spec, plan, worktree, worker, or independent review/i);
+
+const standard = section(routerBody, "Standard");
+assert.match(standard, /bounded ownership/i);
+assert.match(standard, /Do not create[\s\S]{0,180}(?:isolated worker|independent review)/i);
+assert.match(standard, /escalate to Full/i);
+
+const full = section(routerBody, "Full");
+for (const trigger of [
+  /public\/shared interfaces/i,
+  /persisted data/i,
+  /security\/privacy/i,
+  /concurrency/i,
+  /irreversible effects/i,
+  /isolated workers/i,
 ]) {
-  assert.ok(routerBody.includes(anchor), `router must contain ${anchor}`);
+  assert.match(full, trigger, `Full must retain the ${trigger} trigger`);
 }
 
-const micro = section(routerBody, "Route: Micro");
-assert.match(micro, /no new behavior/, "Micro must prohibit new behavior");
-
-const full = section(routerBody, "Route: Full");
-for (const trigger of ["public API", "schema", "security", "concurrency", "irreversible", "subagent"]) {
-  assert.ok(full.includes(trigger), `Full must retain the ${trigger} trigger`);
-}
-
-assert.match(routerBody, /upgrade/i, "the router must require escalation");
-assert.match(routerBody, /verification/i, "the router must require verification");
-assert.ok(wordCount(routerBody) <= 500, "router body must fit the 500-word bootstrap budget");
-
-const extension = await import(new URL(`../.pi/extensions/superpowers.ts?contract=${Date.now()}`, import.meta.url));
-assert.ok(
-  wordCount(extension.buildBootstrapContent(usingSuperpowers)) <= 650,
-  "complete bootstrap text must fit the 650-word budget",
-);
+assert.match(routerBody, /Escalate immediately/i, "the router must require escalation");
+assert.match(routerBody, /verification|verify/i, "the router must require verification");
+assert.doesNotMatch(routerBody, /TodoWrite|pi-subagents|worktree:\s*true|Skill\s*\(\s*\{/i);
+assert.ok(wordCount(routerBody) <= 500, "router body must fit the 500-word on-demand budget");
 
 const routeCases = JSON.parse(readFileSync(path.join(ROOT, "evals", "routing-cases.json"), "utf8"));
 assert.ok(Array.isArray(routeCases), "routing cases must be an array");
@@ -72,8 +75,8 @@ for (const fixture of [
   { "id": "spelling", "prompt": "Correct a misspelled README heading without changing meaning.", "expected": "Micro", "forbidden": ["spec", "plan", "worktree", "subagent", "review"] },
   { "id": "documentation", "prompt": "Clarify an existing API comment without changing code.", "expected": "Micro", "forbidden": ["spec", "plan", "worktree", "subagent", "review"] },
   { "id": "pure-rename", "prompt": "Rename a private local variable with no behavior change.", "expected": "Micro", "forbidden": ["spec", "plan", "worktree", "subagent", "review"] },
-  { "id": "local-bug", "prompt": "Fix a reproducible local off-by-one bug with a regression test.", "expected": "Standard", "forbidden": ["spec", "plan", "worktree", "subagent"] },
-  { "id": "local-feature", "prompt": "Add a clear local behavior behind an existing private interface.", "expected": "Standard", "forbidden": ["spec", "plan", "worktree", "subagent"] },
+  { "id": "local-bug", "prompt": "Fix a reproducible local off-by-one bug with a regression test.", "expected": "Standard", "forbidden": ["spec", "plan", "worktree", "subagent", "review"] },
+  { "id": "local-feature", "prompt": "Add a clear local behavior behind an existing private interface.", "expected": "Standard", "forbidden": ["spec", "plan", "worktree", "subagent", "review"] },
   { "id": "public-api", "prompt": "Change the return type of a public API used across modules.", "expected": "Full", "safetyCritical": true, "required": ["review"] },
   { "id": "schema-migration", "prompt": "Add a persisted field and migrate existing records.", "expected": "Full", "safetyCritical": true, "required": ["review"] },
   { "id": "security", "prompt": "Change encryption or secret-handling behavior.", "expected": "Full", "safetyCritical": true, "required": ["review"] },
@@ -169,7 +172,8 @@ if (!ROUTER_ONLY) {
     "Micro",
     "no independent review",
     "Standard",
-    "risk-gated",
+    "no independent review",
+    "escalate the task to Full",
     "Full",
     "mandatory final whole-change review",
     "new diff",

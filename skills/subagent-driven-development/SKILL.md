@@ -23,6 +23,7 @@ Plan the current milestone as normally two to four packages in one to three roun
 
 Before dispatch:
 
+- confirm that a host-provided fresh-context reviewer or named non-author human reviewer is available for mandatory final Review; otherwise stop before L0 or fanout;
 - verify run/milestone authority hashes, current `HEAD`, tree, and clean status;
 - run L0 for the current milestone exactly as declared in its JSON record; record command, result, base, and milestone identity;
 - failed or unavailable L0 means zero fanout: stop and rederive before dispatch;
@@ -36,8 +37,8 @@ Only after L0 passes, dispatch. Do not silently guess through a contradiction.
 For one current milestone, process planned rounds sequentially:
 
 1. Freeze clean `MILESTONE_BASE` identity (commit, tree, empty status). A **single canonical integrator** owns the real checkout.
-2. Before each round, freeze clean `ROUND_BASE`. Dispatch eligible isolated packages in the current round in one native parallel group with `worktree: true`; `failFast` is only an optimization.
-3. Each implementer verifies manifest, milestone, `ROUND_BASE`, ownership, `mutableResources`, and passed L0; runs package L1 and self-review; then leaves owned changes for native patch capture. Native Pi destroys its temporary branch/worktree after capture; the native handoff is a **patch**, not a branch merge.
+2. Before each round, freeze clean `ROUND_BASE`. Dispatch eligible packages concurrently, each in a host-provided isolated workspace; fail-fast scheduling is only an optimization.
+3. Each implementer verifies manifest, milestone, `ROUND_BASE`, ownership, `mutableResources`, and passed L0; runs package L1 and self-review; then leaves owned changes for host-native patch capture. Temporary worker branches or workspaces may be destroyed after capture, so the handoff is a **patch**, not a branch merge.
 4. Wait for every current-round worker and patch. A failed, blocked, missing, or unresolved worker stops the milestone; the round applies zero patches and recovery returns canonical to `MILESTONE_BASE`.
 5. Before any patch from the current round is applied anywhere, preflight the complete round set: each patch is non-empty; changed paths are a subset of `owns`, including renames and deletions; write sets and exact `mutableResources` identities do not overlap; and `git apply --check` passes against unchanged `ROUND_BASE`. Any mismatch ultimately integrates zero milestone patches.
 6. Complete bounded Review only for a named protected-contract identity when required. Only impact-qualified Critical or Important findings block; unsupported severity labels become `defer` or `reject`. Routine packages have no independent Review.

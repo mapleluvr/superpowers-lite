@@ -1,9 +1,9 @@
 # Fail-First Wave Execution Design
 
 **Date:** 2026-07-19
-**Status:** Approved for implementation planning
-**Package:** `@mapleluvr/pi-superpowers-lite`
-**Base design:** `docs/superpowers/specs/2026-07-12-pi-superpowers-lite-design.md`
+**Status:** Approved execution semantics; package/runtime details superseded by `2026-07-28-superpowers-lite-skill-pack-design.md`
+**Package:** `@mapleluvr/superpowers-lite`
+**Historical base design:** `docs/superpowers/specs/2026-07-12-pi-superpowers-lite-design.md`
 
 ## 1. Purpose
 

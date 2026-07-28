@@ -1,5 +1,6 @@
 node_modules/
+_upstream/
+*.tgz
 .superpowers/
-.pi-subagents/
 evals/results/*
 !evals/results/.gitkeep

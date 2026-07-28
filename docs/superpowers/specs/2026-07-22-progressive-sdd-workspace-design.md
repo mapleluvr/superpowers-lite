@@ -1,6 +1,6 @@
 # Progressive SDD Workspace Design
 
-**Status:** Approved design, pending written-spec confirmation
+**Status:** Implemented; host/runtime boundary updated by `2026-07-28-superpowers-lite-skill-pack-design.md`
 **Date:** 2026-07-22
 **Baseline:** `13a87ba6796b353a405dd02fc15d5afe9ccfa3f9`
 

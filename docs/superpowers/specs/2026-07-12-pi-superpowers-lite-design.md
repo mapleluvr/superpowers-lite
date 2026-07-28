@@ -1,9 +1,9 @@
 # Pi Superpowers Lite Design
 
 **Date:** 2026-07-12
-**Status:** Approved for implementation planning
-**Package:** `@mapleluvr/pi-superpowers-lite` `0.1.0`
-**Upstream baseline:** `obra/superpowers` `v6.1.1` at commit `d884ae0`
+**Status:** Superseded for package/runtime architecture by `2026-07-28-superpowers-lite-skill-pack-design.md`
+**Historical package:** `@mapleluvr/pi-superpowers-lite` `0.1.0`
+**Historical upstream baseline:** `obra/superpowers` `v6.1.1` at commit `d884ae0`
 
 ## 1. Purpose
 

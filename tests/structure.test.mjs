@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   existsSync,
+  lstatSync,
   mkdtempSync,
   mkdirSync,
-  readdirSync,
   readFileSync,
+  readdirSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -13,8 +15,10 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const EXPECTED_SKILLS = [
+import { canonicalLocalBytes } from "../scripts/canonical-local-bytes.mjs";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const expectedSkills = [
   "brainstorming",
   "dispatching-parallel-agents",
   "executing-plans",
@@ -30,312 +34,233 @@ const EXPECTED_SKILLS = [
   "writing-plans",
   "writing-skills",
 ];
-const PINNED_UPSTREAM = Object.freeze({
+const expectedPackageFiles = ["skills", "README.md", "LICENSE", "UPSTREAM.md", "upstream-manifest.json"];
+const expectedUpstream = {
   repository: "https://github.com/obra/superpowers",
-  tag: "v6.1.1",
-  commit: "d884ae04edebef577e82ff7c4e143debd0bbec99",
-});
-const MODIFIED_STATUSES = new Set(["lite-modified", "pi-adapted"]);
-const OPERATIONAL_FILE_EXTENSIONS = "(?:md|js|mjs|cjs|sh|ts|html|dot)";
-const OPERATIONAL_PATH_PATTERN = new RegExp(
-  `(?:\\.{1,2}/|skills/|references/|scripts/|examples/)?[A-Za-z0-9][A-Za-z0-9_.-]*(?:/[A-Za-z0-9][A-Za-z0-9_.-]*)*\\.${OPERATIONAL_FILE_EXTENSIONS}`,
-  "gi",
-);
+  tag: "v6.2.0",
+  commit: "3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9",
+};
 
-function lexicalSort(left, right) {
-  return left < right ? -1 : left > right ? 1 : 0;
+function sha256(bytes) {
+  return createHash("sha256").update(bytes).digest("hex");
 }
 
-function toPortablePath(filePath) {
-  return filePath.split(path.sep).join("/");
-}
-
-function listFiles(directory) {
-  return readdirSync(directory, { withFileTypes: true })
-    .flatMap((entry) => {
-      const entryPath = path.join(directory, entry.name);
-      if (entry.isDirectory()) {
-        return listFiles(entryPath);
-      }
-      return entry.isFile() ? [entryPath] : [];
-    })
-    .sort(lexicalSort);
-}
-
-function sha256(filePath) {
-  return createHash("sha256").update(readFileSync(filePath)).digest("hex");
-}
-
-function frontmatterName(skillFile) {
-  const content = readFileSync(skillFile, "utf8");
-  const frontmatter = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
-  assert.ok(frontmatter, `${skillFile} must start with YAML frontmatter`);
-
-  const name = frontmatter[1].match(/^name:\s*([^\s#]+)\s*$/m);
-  assert.ok(name, `${skillFile} frontmatter must declare name`);
-  return name[1];
-}
-
-function isInside(directory, targetPath) {
-  const relativeTarget = path.relative(directory, targetPath);
-  return relativeTarget && !relativeTarget.startsWith(`..${path.sep}`) && relativeTarget !== "..";
-}
-
-function isExplicitRelativeSkillPath(candidate) {
-  return /^(?:\.{1,2}\/|skills\/|references\/|scripts\/|examples\/)/.test(candidate);
-}
-
-function isClearlyIllustrativeLine(line) {
-  return /(?:\u2713|\u2717|\b(?:good|bad|avoid)\b)/i.test(line);
-}
-
-function forEachOperationalPath(text, callback) {
-  for (const match of text.matchAll(OPERATIONAL_PATH_PATTERN)) {
-    const candidate = match[0];
-    const previousCharacter = text[match.index - 1];
-    const nextCharacter = text[match.index + candidate.length];
-    if (previousCharacter && /[A-Za-z0-9_@./-]/.test(previousCharacter)) {
-      continue;
-    }
-    if (nextCharacter && /[A-Za-z0-9_./-]/.test(nextCharacter)) {
-      continue;
-    }
-    if (candidate.includes("/path/") || candidate.startsWith("path/") || candidate.startsWith("exact/")) {
-      continue;
-    }
-    callback(candidate, match.index);
+function listFiles(directory, prefix = "") {
+  if (!existsSync(directory)) return [];
+  const files = [];
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...listFiles(absolute, relative));
+    else if (entry.isFile()) files.push(relative.replaceAll("\\", "/"));
   }
+  return files.sort();
 }
 
-function resolveRelativeSkillPath({ rootDir, skillsDir, markdownFile, target }) {
-  const cleanTarget = target.trim().replace(/^<|>$/g, "").split(/[?#]/, 1)[0];
-  if (!cleanTarget || cleanTarget.startsWith("/") || /^[a-z][a-z0-9+.-]*:/i.test(cleanTarget)) {
-    return null;
+function parseFrontmatter(text, source) {
+  const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/u);
+  assert.ok(match, `${source} must start with YAML frontmatter`);
+  const fields = {};
+  for (const line of match[1].split(/\r?\n/u)) {
+    const separator = line.indexOf(":");
+    if (separator < 1) continue;
+    const key = line.slice(0, separator).trim();
+    let value = line.slice(separator + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    fields[key] = value;
   }
-
-  const targetPath = cleanTarget.startsWith("skills/")
-    ? path.resolve(rootDir, cleanTarget)
-    : path.resolve(path.dirname(markdownFile), cleanTarget);
-  assert.ok(
-    isInside(skillsDir, targetPath),
-    `${markdownFile} must not reference outside skills/: ${target}`,
-  );
-  return targetPath;
+  return fields;
 }
 
-function collectOperationalReferences({ rootDir, markdownFile }) {
-  const skillsDir = path.join(rootDir, "skills");
-  const references = [];
-  const seen = new Set();
-  const addReference = (target) => {
-    const targetPath = resolveRelativeSkillPath({ rootDir, skillsDir, markdownFile, target });
-    if (targetPath && !seen.has(targetPath)) {
-      seen.add(targetPath);
-      references.push({ target, targetPath });
-    }
-  };
-
-  let fence;
-  for (const line of readFileSync(markdownFile, "utf8").split(/\r?\n/)) {
-    const fenceMatch = line.match(/^\s*(`{3,}|~{3,})/);
-    if (fenceMatch) {
-      const marker = fenceMatch[1];
-      if (!fence) {
-        fence = marker;
-        continue;
-      }
-      if (marker[0] === fence[0] && marker.length >= fence.length) {
-        fence = undefined;
-      }
-      continue;
-    }
-    if (fence) {
-      continue;
-    }
-
-    for (const link of line.matchAll(/\[[^\]]*\]\(([^)\s]+)(?:\s+[^)]*)?\)/g)) {
-      addReference(link[1]);
-    }
-
-    const withoutLinks = line.replace(/\[[^\]]*\]\([^)]+\)/g, " ");
-    const codeSpans = [...withoutLinks.matchAll(/`([^`\n]+)`/g)];
-    for (const codeSpan of codeSpans) {
-      if (isClearlyIllustrativeLine(line)) {
-        continue;
-      }
-      forEachOperationalPath(codeSpan[1], (candidate, index) => {
-        const prefix = `${withoutLinks.slice(0, codeSpan.index)}${codeSpan[1].slice(0, index)}`;
-        const isBoldReferenceListItem = /^\s*[-*]\s+\*\*`/.test(line);
-        if (
-          isExplicitRelativeSkillPath(candidate)
-          || isBoldReferenceListItem
-          || /\b(?:see|read|load|use|run)\s+(?:the\s+)?(?:detailed\s+)?(?:guide|reference|file)?\s*$/i.test(prefix)
-        ) {
-          addReference(candidate);
-        }
-      });
-    }
-
-    const prose = withoutLinks.replace(/`[^`\n]+`/g, " ");
-    forEachOperationalPath(prose, (candidate, index) => {
-      const prefix = prose.slice(Math.max(0, index - 80), index);
-      if (/\b(?:see|read|load)\s+(?:the\s+)?(?:detailed\s+)?(?:guide|reference|file)?\s*$/i.test(prefix)) {
-        addReference(candidate);
-      }
+function localMode(packageRoot, relativePath, fallback = "100644") {
+  if (process.platform !== "win32") {
+    const stat = lstatSync(path.join(packageRoot, relativePath));
+    return stat.mode & 0o111 ? "100755" : "100644";
+  }
+  try {
+    const output = execFileSync("git", ["-C", packageRoot, "ls-files", "--stage", "--", relativePath], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
     });
-  }
-
-  return references;
-}
-
-function assertOperationalRelativeReferencesExist(rootDir, entryFiles) {
-  const pending = [...entryFiles];
-  const scanned = new Set();
-
-  while (pending.length > 0) {
-    const markdownFile = pending.pop();
-    if (scanned.has(markdownFile)) {
-      continue;
-    }
-    scanned.add(markdownFile);
-
-    for (const reference of collectOperationalReferences({ rootDir, markdownFile })) {
-      assert.ok(
-        existsSync(reference.targetPath),
-        `${markdownFile} references missing file: ${reference.target}`,
-      );
-      if (path.extname(reference.targetPath).toLowerCase() === ".md") {
-        pending.push(reference.targetPath);
-      }
-    }
+    const mode = output.trim().match(/^(\d{6})\s/u)?.[1];
+    return mode || fallback;
+  } catch {
+    return fallback;
   }
 }
 
-export function assertPackageStructure({ rootDir = ROOT, expectedSkills = EXPECTED_SKILLS } = {}) {
-  const skillsDir = path.join(rootDir, "skills");
-  const packageJson = JSON.parse(readFileSync(path.join(rootDir, "package.json"), "utf8"));
-  const manifest = JSON.parse(readFileSync(path.join(rootDir, "upstream-manifest.json"), "utf8"));
-  const skillDirectories = readdirSync(skillsDir, { withFileTypes: true })
+function localMarkdownTargets(packageRoot, relativePath, text) {
+  if (relativePath.endsWith("anthropic-best-practices.md")) return [];
+  const withoutFences = text.replace(/```[\s\S]*?```/gu, "");
+  return [...withoutFences.matchAll(/\[[^\]]*\]\(([^)]+)\)/gu)]
+    .map((match) => match[1].trim())
+    .filter((target) => target && !target.startsWith("#") && !/^[a-z][a-z0-9+.-]*:/iu.test(target))
+    .map((target) => {
+      let cleaned = target.replace(/^<|>$/gu, "").split("#", 1)[0];
+      cleaned = cleaned.split(/\s+(?=["'])/u, 1)[0];
+      return decodeURIComponent(cleaned);
+    })
+    .filter(Boolean)
+    .map((target) => ({
+      target,
+      candidates: [
+        path.resolve(path.dirname(path.join(packageRoot, relativePath)), target),
+        path.resolve(packageRoot, target),
+      ],
+    }));
+}
+
+function runStructureForRoot(packageRoot, requiredSkills = expectedSkills) {
+  const packageJson = JSON.parse(readFileSync(path.join(packageRoot, "package.json"), "utf8"));
+  assert.equal(packageJson.name, "@mapleluvr/superpowers-lite");
+  assert.equal(packageJson.version, "0.2.0");
+  assert.deepEqual(packageJson.files, expectedPackageFiles);
+  for (const forbiddenField of ["main", "pi", "scripts", "dependencies", "peerDependencies", "devDependencies"]) {
+    assert.equal(packageJson[forbiddenField], undefined, `package must not declare ${forbiddenField}`);
+  }
+  assert.ok(packageJson.keywords.includes("agent-skills"));
+  assert.ok(packageJson.keywords.includes("skill-pack"));
+  assert.ok(!packageJson.keywords.some((keyword) => keyword.startsWith("pi-")));
+  assert.equal(existsSync(path.join(packageRoot, ".pi")), false, "pure skill pack must not contain .pi resources");
+
+  const lockPath = path.join(packageRoot, "package-lock.json");
+  if (existsSync(lockPath)) {
+    const lock = JSON.parse(readFileSync(lockPath, "utf8"));
+    assert.deepEqual(Object.keys(lock.packages), [""], "lockfile must not contain dependencies");
+  }
+
+  const skillRoot = path.join(packageRoot, "skills");
+  const actualSkills = readdirSync(skillRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
-    .sort(lexicalSort);
+    .sort();
+  assert.deepEqual(actualSkills, [...requiredSkills].sort());
 
-  assert.deepEqual(skillDirectories, expectedSkills, "skills/ must contain the exact expected set");
+  const names = new Set();
+  for (const skill of actualSkills) {
+    const relativePath = `skills/${skill}/SKILL.md`;
+    const text = readFileSync(path.join(packageRoot, relativePath), "utf8");
+    const frontmatter = parseFrontmatter(text, relativePath);
+    assert.equal(frontmatter.name, skill, `${relativePath} name must match its directory`);
+    assert.match(frontmatter.name, /^[a-z0-9-]{1,64}$/u);
+    assert.ok(frontmatter.description, `${relativePath} requires a description`);
+    assert.ok(Buffer.byteLength(frontmatter.description, "utf8") <= 1024, `${relativePath} description exceeds 1024 bytes`);
+    assert.ok(!names.has(frontmatter.name), `duplicate skill name: ${frontmatter.name}`);
+    names.add(frontmatter.name);
+  }
 
-  const skillFiles = skillDirectories.map((skillName) => {
-    const skillFile = path.join(skillsDir, skillName, "SKILL.md");
-    assert.ok(existsSync(skillFile), `${skillName} must contain SKILL.md`);
-    assert.equal(frontmatterName(skillFile), skillName, `${skillFile} name must match its directory`);
-    return skillFile;
-  });
-  assert.equal(new Set(skillDirectories).size, skillDirectories.length, "skill names must be unique");
-  assertOperationalRelativeReferencesExist(rootDir, skillFiles);
+  const nestedSkillFiles = listFiles(skillRoot).filter((relativePath) => relativePath.endsWith("/SKILL.md"));
+  assert.deepEqual(
+    nestedSkillFiles.sort(),
+    actualSkills.map((skill) => `${skill}/SKILL.md`).sort(),
+    "nested or missing SKILL.md files change discovery semantics",
+  );
 
-  assert.deepEqual(packageJson.pi?.extensions, ["./.pi/extensions/superpowers.ts"], "package.json must register the planned extension path exactly");
-  assert.deepEqual(packageJson.pi?.skills, ["./skills"], "package.json must register the skills path exactly");
-  assert.ok(existsSync(path.resolve(rootDir, packageJson.pi.skills[0])), "package.json skill path must exist");
+  const manifest = JSON.parse(readFileSync(path.join(packageRoot, "upstream-manifest.json"), "utf8"));
+  assert.equal(manifest.repository, expectedUpstream.repository);
+  assert.equal(manifest.tag, expectedUpstream.tag);
+  assert.equal(manifest.commit, expectedUpstream.commit);
+  assert.ok(Array.isArray(manifest.excluded));
+  assert.ok(Array.isArray(manifest.files));
 
-  assert.equal(manifest.repository, PINNED_UPSTREAM.repository, "manifest repository must match the upstream pin");
-  assert.equal(manifest.tag, PINNED_UPSTREAM.tag, "manifest tag must match the upstream pin");
-  assert.equal(manifest.commit, PINNED_UPSTREAM.commit, "manifest commit must match the upstream pin");
+  const excludedPaths = new Set();
+  for (const exclusion of manifest.excluded) {
+    assert.match(exclusion.path, /^skills\//u);
+    assert.ok(exclusion.reason?.trim().length >= 8, `${exclusion.path} needs an exclusion reason`);
+    assert.ok(!excludedPaths.has(exclusion.path), `duplicate exclusion: ${exclusion.path}`);
+    excludedPaths.add(exclusion.path);
+    assert.equal(existsSync(path.join(packageRoot, exclusion.path)), false, `excluded path is present: ${exclusion.path}`);
+  }
 
-  const importedFiles = listFiles(skillsDir)
-    .map((filePath) => toPortablePath(path.relative(rootDir, filePath)));
-  const extensionFiles = packageJson.pi.extensions
-    .map((extensionPath) => path.resolve(rootDir, extensionPath))
-    .filter((extensionPath) => existsSync(extensionPath))
-    .map((extensionPath) => toPortablePath(path.relative(rootDir, extensionPath)));
-  const trackedFiles = [...importedFiles, ...extensionFiles].sort(lexicalSort);
-  assert.ok(Array.isArray(manifest.files), "upstream-manifest.json files must be an array");
-  assert.ok(manifest.files.length > 0, "upstream-manifest.json must register imported files");
-
-  const manifestPaths = manifest.files.map((entry) => entry.path);
-  assert.deepEqual(manifestPaths, trackedFiles, "every imported file and registered extension must be represented in the manifest");
-  assert.equal(new Set(manifestPaths).size, manifestPaths.length, "manifest paths must be unique");
-
+  const manifestPaths = new Set();
   for (const entry of manifest.files) {
-    assert.equal(typeof entry.path, "string", "manifest entries must include paths");
-    assert.match(entry.upstreamHash, /^[a-f0-9]{64}$/, `${entry.path} must include a SHA-256 upstream hash`);
-    assert.ok(
-      entry.status === "unchanged" || MODIFIED_STATUSES.has(entry.status),
-      `${entry.path} has an invalid manifest status`,
-    );
+    assert.match(entry.path, /^skills\//u);
+    assert.ok(!manifestPaths.has(entry.path), `duplicate manifest path: ${entry.path}`);
+    assert.ok(!excludedPaths.has(entry.path), `retained and excluded path conflict: ${entry.path}`);
+    manifestPaths.add(entry.path);
+    assert.ok(["unchanged", "lite-modified"].includes(entry.status));
+    assert.match(entry.upstreamHash, /^[0-9a-f]{64}$/u);
+    assert.match(entry.localHash, /^[0-9a-f]{64}$/u);
+    assert.ok(["100644", "100755"].includes(entry.upstreamMode));
+    assert.ok(["100644", "100755"].includes(entry.localMode));
 
-    const localHash = sha256(path.join(rootDir, entry.path));
-    if (entry.status === "unchanged") {
-      assert.equal(localHash, entry.upstreamHash, `${entry.path} changed without manifest registration`);
-    } else {
-      assert.notEqual(localHash, entry.upstreamHash, `${entry.path} is marked modified but matches upstream`);
+    const absolute = path.join(packageRoot, entry.path);
+    assert.ok(existsSync(absolute), `manifest path missing locally: ${entry.path}`);
+    assert.equal(sha256(canonicalLocalBytes(readFileSync(absolute), entry.path)), entry.localHash, `local hash mismatch: ${entry.path}`);
+    assert.equal(localMode(packageRoot, entry.path, entry.localMode), entry.localMode, `local mode mismatch: ${entry.path}`);
+    const same = entry.upstreamHash === entry.localHash && entry.upstreamMode === entry.localMode;
+    assert.equal(entry.status === "unchanged", same, `status/hash-mode invariant failed: ${entry.path}`);
+  }
+
+  const runtimePaths = listFiles(skillRoot).map((relativePath) => `skills/${relativePath}`);
+  assert.deepEqual([...manifestPaths].sort(), runtimePaths.sort(), "manifest must account for every retained skill asset");
+
+  const forbiddenRuntime = /\bPi\b|\bTodoWrite\b|pi-subagents|native Pi|\.pi\/extensions|worktree:\s*true|\bfailFast\b|\bSkill\s*\(\s*\{/iu;
+  for (const relativePath of runtimePaths) {
+    const absolute = path.join(packageRoot, relativePath);
+    const bytes = readFileSync(absolute);
+    if (bytes.includes(0)) continue;
+    const text = bytes.toString("utf8");
+    assert.doesNotMatch(text, forbiddenRuntime, `${relativePath} contains a host-specific runtime dependency`);
+    for (const link of localMarkdownTargets(packageRoot, relativePath, text)) {
+      assert.ok(link.candidates.some(existsSync), `${relativePath} has a missing local link: ${link.target}`);
     }
   }
-
-  return { importedFiles };
 }
 
-function writeFile(filePath, content) {
-  mkdirSync(path.dirname(filePath), { recursive: true });
-  writeFileSync(filePath, content);
+runStructureForRoot(root);
+
+const fixtureRoot = mkdtempSync(path.join(os.tmpdir(), "superpowers-lite-structure-"));
+try {
+  mkdirSync(path.join(fixtureRoot, "skills", "sample"), { recursive: true });
+  writeFileSync(path.join(fixtureRoot, "skills", "sample", "SKILL.md"), "---\nname: sample\ndescription: Use for sample work.\n---\n\nRead [guide](guide.md).\n");
+  writeFileSync(path.join(fixtureRoot, "skills", "sample", "guide.md"), "# Guide\n");
+  const packageJson = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
+  writeFileSync(path.join(fixtureRoot, "package.json"), `${JSON.stringify(packageJson, null, 2)}\n`);
+  const sampleFiles = ["skills/sample/SKILL.md", "skills/sample/guide.md"].map((relativePath) => {
+    const hash = sha256(canonicalLocalBytes(readFileSync(path.join(fixtureRoot, relativePath)), relativePath));
+    return {
+      path: relativePath,
+      upstreamHash: hash,
+      upstreamMode: "100644",
+      localHash: hash,
+      localMode: "100644",
+      status: "unchanged",
+    };
+  });
+  writeFileSync(path.join(fixtureRoot, "upstream-manifest.json"), `${JSON.stringify({
+    ...expectedUpstream,
+    excluded: [],
+    files: sampleFiles,
+  }, null, 2)}\n`);
+
+  runStructureForRoot(fixtureRoot, ["sample"]);
+
+  const sampleSkillPath = path.join(fixtureRoot, "skills", "sample", "SKILL.md");
+  const sampleSkill = readFileSync(sampleSkillPath, "utf8");
+  writeFileSync(sampleSkillPath, sampleSkill.replaceAll("\n", "\r\n"));
+  runStructureForRoot(fixtureRoot, ["sample"]);
+  writeFileSync(sampleSkillPath, sampleSkill);
+
+  packageJson.pi = { skills: ["./skills"] };
+  writeFileSync(path.join(fixtureRoot, "package.json"), `${JSON.stringify(packageJson, null, 2)}\n`);
+  assert.throws(() => runStructureForRoot(fixtureRoot, ["sample"]), /must not declare pi/u);
+  delete packageJson.pi;
+  writeFileSync(path.join(fixtureRoot, "package.json"), `${JSON.stringify(packageJson, null, 2)}\n`);
+
+  const skillPath = path.join(fixtureRoot, "skills", "sample", "SKILL.md");
+  const original = readFileSync(skillPath, "utf8");
+  writeFileSync(skillPath, original.replace("guide.md", "missing.md"));
+  const manifest = JSON.parse(readFileSync(path.join(fixtureRoot, "upstream-manifest.json"), "utf8"));
+  manifest.files.find((entry) => entry.path.endsWith("SKILL.md")).localHash = sha256(canonicalLocalBytes(readFileSync(skillPath), "skills/sample/SKILL.md"));
+  manifest.files.find((entry) => entry.path.endsWith("SKILL.md")).upstreamHash = "0".repeat(64);
+  manifest.files.find((entry) => entry.path.endsWith("SKILL.md")).status = "lite-modified";
+  writeFileSync(path.join(fixtureRoot, "upstream-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+  assert.throws(() => runStructureForRoot(fixtureRoot, ["sample"]), /missing local link/u);
+} finally {
+  rmSync(fixtureRoot, { recursive: true, force: true });
 }
 
-function writeFixtureManifest(rootDir) {
-  const skillsDir = path.join(rootDir, "skills");
-  const files = listFiles(skillsDir).map((filePath) => ({
-    path: toPortablePath(path.relative(rootDir, filePath)),
-    upstreamHash: sha256(filePath),
-    status: "unchanged",
-  }));
-  writeFile(
-    path.join(rootDir, "upstream-manifest.json"),
-    `${JSON.stringify({ ...PINNED_UPSTREAM, files }, null, 2)}\n`,
-  );
-}
-
-function assertReferenceFixture() {
-  const fixtureRoot = mkdtempSync(path.join(os.tmpdir(), "pi-superpowers-structure-"));
-  const skillDir = path.join(fixtureRoot, "skills", "alpha");
-
-  try {
-    writeFile(
-      path.join(fixtureRoot, "package.json"),
-      `${JSON.stringify({
-        pi: {
-          extensions: ["./.pi/extensions/superpowers.ts"],
-          skills: ["./skills"],
-        },
-      }, null, 2)}\n`,
-    );
-    writeFile(
-      path.join(skillDir, "SKILL.md"),
-      "---\nname: alpha\n---\nRead [the guide](references/guide.md).\n",
-    );
-    writeFile(
-      path.join(skillDir, "references", "guide.md"),
-      "Run `scripts/worker.js` and see notes.md before release.\n```markdown\nSee [missing.md](missing.md) and `scripts/missing.js`.\n```\n",
-    );
-    writeFile(path.join(skillDir, "references", "notes.md"), "Operational reference notes.\n");
-    writeFile(path.join(skillDir, "references", "scripts", "worker.js"), "export default 1;\n");
-    writeFixtureManifest(fixtureRoot);
-
-    assertPackageStructure({ rootDir: fixtureRoot, expectedSkills: ["alpha"] });
-
-    rmSync(path.join(skillDir, "references", "scripts", "worker.js"));
-    writeFixtureManifest(fixtureRoot);
-    assert.throws(
-      () => assertPackageStructure({ rootDir: fixtureRoot, expectedSkills: ["alpha"] }),
-      /references missing file: scripts\/worker\.js/,
-      "a missing recursively referenced asset fails even after its manifest entry is removed",
-    );
-  } finally {
-    rmSync(fixtureRoot, { recursive: true, force: true });
-  }
-}
-
-function isMainModule() {
-  return process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-}
-
-if (isMainModule()) {
-  const { importedFiles } = assertPackageStructure();
-  assertReferenceFixture();
-  console.log(`structure checks passed for ${importedFiles.length} imported files`);
-}
+console.log("skill-pack structure checks passed");

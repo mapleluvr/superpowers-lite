@@ -40,7 +40,7 @@ Use only when the current milestone establishes the predicate above. Each implem
 - task card path, package-local L1 command, milestone acceptance/public flow, and expected evidence;
 - report path and status vocabulary.
 
-Dispatch native implementation workers with `worktree: true`. They return a patch handoff and report; they do not merge temporary branches or write canonical state.
+Dispatch implementation workers in host-provided isolated workspaces. They return a patch handoff and report; they do not merge temporary branches or write canonical state.
 
 Delegate complete-set preflight, review, admission, quarantine, and canonical integration to `subagent-driven-development`. Do not duplicate that algorithm here. A failed implementation package set integrates zero patches. After successful atomic integration, the controller runs the milestone union L2 affected closure through the declared public entry or controlled E2E. L3 remains finalization-only.
 
@@ -57,7 +57,7 @@ A good prompt answers:
 
 ## Dispatch and Collection
 
-Issue independent calls in one parallel group and set concurrency appropriate to the host. `failFast` can reduce wasted work but never authorizes partial integration.
+Issue independent calls in one parallel group and set concurrency appropriate to the host. Fail-fast scheduling can reduce wasted work but never authorizes partial integration.
 
 When results return:
 

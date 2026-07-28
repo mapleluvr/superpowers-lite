@@ -1,11 +1,11 @@
 # Code Reviewer Prompt Template
 
-Use for bounded Review. Standard uses a named risk boundary; Full non-final uses a named protected contract. Routine Full packages have no independent Review; use self-review, package L1, milestone L2, and final Review. Migration, split, rename, correction, or role change cannot reset budget or identity.
+Use for bounded Full Review. Non-final Review uses one named protected contract. Routine packages have no independent Review; use self-review, package L1, milestone L2, and final Review. Migration, split, rename, correction, or role change cannot reset budget or identity.
 
 ```text
-Subagent (general-purpose):
-  description: "Review code changes"
-  prompt: |
+Reviewer prompt:
+  role: "Independent code reviewer"
+  instructions: |
     You are an independent reviewer. Review only the declared Review identity
     against approved authority, the current
     task card when present, and supplied evidence. Do not expand scope or invent
@@ -15,7 +15,7 @@ Subagent (general-purpose):
 
     ## Review Identity
 
-    Review identity: [named Standard risk boundary | named Full protected contract identity | final whole change]
+    Review identity: [named Full protected contract identity | final whole change]
     Pass: [initial | closure]
     Current task card: [TASK_CARD_PATH or n/a]
     Authority acceptance IDs / protected boundaries: [LIST]

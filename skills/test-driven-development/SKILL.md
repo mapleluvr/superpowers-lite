@@ -367,12 +367,12 @@ Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix 
 
 Never fix bugs without a test.
 
-## Testing Anti-Patterns
+## Test Quality
 
-When adding mocks or test utilities, read [testing-anti-patterns.md](testing-anti-patterns.md) to avoid common pitfalls:
-- Testing mock behavior instead of real behavior
-- Adding test-only methods to production classes
-- Mocking without understanding dependencies
+When adding or changing tests, mocks, or test utilities, read
+[writing-good-tests.md](writing-good-tests.md). Prefer tests of observable
+behavior through real production paths; avoid asserting source text, mock call
+patterns, or test-only production APIs when behavior can be exercised directly.
 
 ## Final Rule
 

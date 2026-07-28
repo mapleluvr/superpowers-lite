@@ -35,7 +35,7 @@ The server watches a directory for HTML files and serves the newest one to the b
 ```bash
 # Start AFTER the user approves the companion. --open auto-opens their browser on
 # the first screen; --project-dir persists mockups and enables same-port restart.
-scripts/start-server.sh --project-dir /path/to/project --open
+bash scripts/start-server.sh --project-dir /path/to/project --open
 
 # Returns: {"type":"server-started","port":52341,
 #           "url":"http://localhost:52341/?key=ab12…",
@@ -57,32 +57,23 @@ without repeating it.
 
 **Note:** Pass the project root as `--project-dir` so mockups persist in `.superpowers/brainstorm/` and survive server restarts. Without it, files go to `/tmp` and get cleaned up. Remind the user to add `.superpowers/` to `.gitignore` if it's not already there.
 
-**Launching the server from Pi:**
+**Launching the server:**
 
-Pi core has no background Bash. Do not invent `run_in_background`, `shellId`, or
-other harness parameters. Start the foreground server in a persistent terminal:
+Use the host's long-running shell or process mechanism. The exact invocation is
+host-specific, but the server must remain alive across conversation turns. If
+the host can keep background processes alive, start the server in the background.
+Otherwise use `--foreground` with the host's supported asynchronous or persistent
+terminal mechanism. Do not invent tool-specific parameters or assume that a
+background process will survive automatically.
 
-```bash
-# Unix host with tmux installed
-tmux new-session -d -s superpowers-visual \
-  'scripts/start-server.sh --project-dir /path/to/project --open --foreground'
-```
-
-On Windows or a host without tmux, ask the user to run this in a separate Git
-Bash or other persistent terminal and leave that terminal open:
-
-```bash
-scripts/start-server.sh --project-dir /path/to/project --open --foreground
-```
-
-Then use Pi's lowercase `read` tool on `$STATE_DIR/server-info` to obtain and
-verify the complete URL. If no persistent terminal mechanism is available, do
-not launch the companion; continue the design discussion in the terminal.
+The server prints startup JSON containing `url`, `port`, `screen_dir`, and
+`state_dir`. Save those values and use the host's file-reading mechanism to read
+`state_dir/server-info` if stdout was not captured.
 
 If the URL is unreachable from your browser (common in remote/containerized setups), bind a non-loopback host:
 
 ```bash
-scripts/start-server.sh \
+bash scripts/start-server.sh \
   --project-dir /path/to/project \
   --host 0.0.0.0 \
   --url-host localhost
@@ -93,7 +84,7 @@ Use `--url-host` to control what hostname is printed in the returned URL JSON.
 ## The Loop
 
 1. **Check server is alive**, then **write HTML** to a new file in `screen_dir`:
-   - **Required: confirm the server is alive before referring to the URL or pushing a screen.** Check that `$STATE_DIR/server-info` exists and `$STATE_DIR/server-stopped` does not. If it has shut down, restart it with `start-server.sh` using the **same `--project-dir`** — it reuses the same port, so the user's open tab reconnects on its own (it shows a "paused" overlay while the server is down) and you don't need to send a new URL. The server auto-exits after 4 hours idle (configurable with `--idle-timeout-minutes`).
+   - **Required: confirm the server is alive before referring to the URL or pushing a screen.** Check that `$STATE_DIR/server-info` exists and `$STATE_DIR/server-stopped` does not. If it has shut down, restart it with `bash scripts/start-server.sh` using the **same `--project-dir`** — it reuses the same port, so the user's open tab reconnects on its own (it shows a "paused" overlay while the server is down) and you don't need to send a new URL. The server auto-exits after 4 hours idle (configurable with `--idle-timeout-minutes`).
    - Use semantic filenames: `platform.html`, `visual-style.html`, `layout.html`
    - **Never reuse filenames** — each screen gets a fresh file
    - Use your file-creation tool — **never use cat/heredoc** (dumps noise into terminal)
@@ -275,7 +266,7 @@ If `$STATE_DIR/events` doesn't exist, the user didn't interact with the browser 
 ## Cleaning Up
 
 ```bash
-scripts/stop-server.sh $SESSION_DIR
+bash scripts/stop-server.sh $SESSION_DIR
 ```
 
 If the session used `--project-dir`, mockup files persist in `.superpowers/brainstorm/` for later reference. Only `/tmp` sessions get deleted on stop.

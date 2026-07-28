@@ -34,7 +34,16 @@ function git(...args) {
 
 function createSyntheticGitPair() {
   const temporaryDirectory = mkdtempSync(path.join(os.tmpdir(), "execution-eval-git-"));
-  const environment = { ...process.env, GIT_INDEX_FILE: path.join(temporaryDirectory, "index") };
+  const environment = {
+    ...process.env,
+    GIT_INDEX_FILE: path.join(temporaryDirectory, "index"),
+    GIT_AUTHOR_NAME: "Superpowers Lite Tests",
+    GIT_AUTHOR_EMAIL: "tests@example.invalid",
+    GIT_COMMITTER_NAME: "Superpowers Lite Tests",
+    GIT_COMMITTER_EMAIL: "tests@example.invalid",
+    GIT_AUTHOR_DATE: "2000-01-01T00:00:00Z",
+    GIT_COMMITTER_DATE: "2000-01-01T00:00:00Z",
+  };
   const run = (args, options = {}) => execFileSync("git", args, {
     cwd: root,
     env: environment,
@@ -490,7 +499,7 @@ assert.deepEqual(Object.keys(skillContract).sort(), ["parseFrontmatter", "readRe
 assert.equal(skillContract.parseFrontmatter("---\nname: sample\ndescription: 'quoted value'\n---\n# Body").description, "quoted value");
 assert.equal(skillContract.readSection("# One\nalpha beta\n## Two\ngamma\n# Three\ndelta", "One"), "alpha beta\n## Two\ngamma");
 assert.equal(skillContract.wordCount(" alpha  beta\n gamma "), 3);
-assert.match(skillContract.readRepoFile("package.json"), /pi-superpowers-lite/u);
+assert.match(skillContract.readRepoFile("package.json"), /@mapleluvr\/superpowers-lite/u);
 assert.throws(() => skillContract.readRepoFile("../package.json"), /package root/u);
 assert.throws(() => skillContract.readRepoFile(path.resolve(root, "package.json")), /relative path/u);
 
@@ -1062,12 +1071,15 @@ reusedCauseProfile.events.sort((left, right) => left.sequence - right.sequence);
 expectInvalid(validate(reusedMaterialCause), /finishing-a-development-branch.*immediate prior L3|finishing-a-development-branch.*material cause.*reused/i);
 
 const packageJson = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
-assert.equal(packageJson.files.filter((entry) => entry === "evals/execution-cases.json").length, 1);
-assert.equal(packageJson.files.filter((entry) => entry === "evals/execution-evaluator-prompt.md").length, 1);
+const sourceTestRunner = readFileSync(path.join(root, "scripts", "test.mjs"), "utf8");
+assert.equal(packageJson.files.some((entry) => entry.startsWith("evals/")), false,
+  "development evaluation fixtures must not ship in the runtime skill pack");
+assert.equal(packageJson.scripts, undefined,
+  "the published manifest must not expose source-only validation commands");
 assert.equal(
-  packageJson.scripts.test.split("node tests/validate-execution-eval-report.test.mjs").length - 1,
+  sourceTestRunner.split("tests/validate-execution-eval-report.test.mjs").length - 1,
   1,
-  "validator contract test is registered exactly once",
+  "validator contract test is registered exactly once in the source runner",
 );
 
 console.log("execution evaluation validator contract checks passed");

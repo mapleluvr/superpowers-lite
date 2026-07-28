@@ -30,8 +30,10 @@ for (const predicate of [
 assert.match(skill, /investigation.*read-only/is, "investigation fanout must remain read-only");
 assert.match(skill, /investigation.*(?:omit|without).*worktree/is,
   "read-only investigations may omit worktrees");
-assert.match(skill, /implementation.*worktree:\s*true/is,
-  "implementation fanout must use isolated native worktrees");
+assert.match(skill, /implementation workers.*host-provided isolated workspaces/is,
+  "implementation fanout must use host-provided isolation");
+assert.doesNotMatch(skill, /worktree:\s*true|failFast|native Pi/i,
+  "parallel dispatch must not require a host-specific call schema");
 assert.match(skill, /patch handoff/i, "implementation workers must return patches");
 assert.match(skill, /subagent-driven-development/i,
   "implementation admission must delegate to SDD rather than duplicate it");

@@ -20,14 +20,14 @@ for (const content of [review, reviewer, protectedReviewer]) {
 
 assert.match(review, /one initial review[\s\S]{0,180}one consolidated correction[\s\S]{0,180}one closure review/i,
   "each protected/final Review identity must remain bounded");
-assert.match(review, /Standard[\s\S]{0,180}(?:risk-gated|risk boundary|shared behavior)/i,
-  "Standard must retain its risk-gated non-final Review path");
-assert.match(review, /Standard Review identity[\s\S]{0,100}named risk boundary|named risk boundary[\s\S]{0,100}Standard Review identity/i,
-  "Standard must be able to bind a conforming named-risk Review identity");
-assert.match(review, /(?:Standard-risk|Standard risk)[\s\S]{0,120}(?:protected-contract|protected contract)[\s\S]{0,120}final whole[- ]change[\s\S]{0,220}one initial review[\s\S]{0,180}one consolidated correction[\s\S]{0,180}one closure review/i,
-  "Standard, protected-contract, and final identities must share the bounded pass semantics");
-assert.match(reviewer, /Review identity:\s*\[named Standard risk boundary\s*\|\s*named Full protected contract identity\s*\|\s*final whole change\]/i,
-  "the shared reviewer packet must accept a Standard named-risk identity");
+assert.match(review, /Standard:[\s\S]{0,140}no independent review/i,
+  "Standard must remain self-review only");
+assert.match(review, /Standard:[\s\S]{0,320}escalate the task to Full/i,
+  "work needing independent Review must route to Full before dispatch");
+assert.doesNotMatch(reviewText, /Standard Review identity|Standard-risk|named Standard risk boundary/i,
+  "review templates must not recreate a Standard independent-review path");
+assert.match(reviewer, /Review identity:\s*\[named Full protected contract identity\s*\|\s*final whole change\]/i,
+  "the shared reviewer packet must accept only Full protected/final identities");
 assert.doesNotMatch(reviewText, /review-unit type: protected contract, frontier boundary/i,
   "ordinary frontier boundaries must not be independent Review identities");
 assert.doesNotMatch(reviewText, /Routine frontiers have no independent task Review/i,

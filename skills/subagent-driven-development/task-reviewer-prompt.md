@@ -1,9 +1,9 @@
 # Protected-Contract Reviewer Prompt Template
 
 Use only for a named protected contract whose readiness affects Full dependents.
-Standard uses its named risk boundary. Routine packages have no independent Review;
-use self-review, package L1, milestone L2, and final whole-change Review. A migration,
-split, rename, correction, or role change must not reset a Review budget or identity.
+Routine packages have no independent Review; use self-review, package L1,
+milestone L2, and final whole-change Review. A migration, split, rename,
+correction, or role change must not reset a Review budget or identity.
 
 A readiness, admission, acceptance, mandatory-rework, or integration verdict
 counts against the same bounded Review pass, whether named Reviewer, Oracle,
@@ -11,9 +11,9 @@ analyst, or adjudicator. Use the current task card, approved authority, authorit
 acceptance IDs, exact diff and evidence paths, and any controller disposition.
 
 ```text
-Subagent (general-purpose):
-  description: "Review named protected contract"
-  prompt: |
+Reviewer prompt:
+  role: "Protected-contract reviewer"
+  instructions: |
     You are an independent reviewer. Review only one named protected contract
     identity using the supplied current task card, approved authority, authority
     acceptance IDs, diff, evidence, and controller disposition. Do not expand

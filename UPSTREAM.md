@@ -1,45 +1,84 @@
 # Upstream Provenance
 
-Pi Superpowers Lite is a maintained Pi-native fork of
+Superpowers Lite is derived from
 [`obra/superpowers`](https://github.com/obra/superpowers).
 
+## Pinned Snapshot
+
 - Repository: `https://github.com/obra/superpowers`
-- Tag: `v6.1.1`
-- Commit: `d884ae04edebef577e82ff7c4e143debd0bbec99`
-- License: MIT; see [LICENSE](LICENSE)
-- Snapshot source: the local checkout verified during package foundation
+- Tag: `v6.2.0`
+- Commit: `3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9`
 
-## File Classes
+Only the upstream `skills/` tree is in scope. Host extensions, plugin adapters,
+marketplace metadata, and upstream test harnesses are not part of this skill
+pack.
 
-`upstream-manifest.json` records a SHA-256 baseline and one of three statuses
-for every imported file:
+## Manifest
 
-- `unchanged`: byte and mode parity is required; synchronization may update it.
-- `lite-modified`: route-proportional workflow text intentionally differs and
-  must be reconciled manually when upstream changes.
-- `pi-adapted`: Pi lifecycle, tool mapping, or Pi-specific reference behavior;
-  it is maintained locally and never overwritten by automatic sync.
+[`upstream-manifest.json`](upstream-manifest.json) is the machine-readable source
+of truth. Every retained runtime file records:
 
-The package keeps one skill tree. Full remains the feature assurance level for
-durable authority, protected contracts, final L3, whole-change Review, and live
-effects. Inside a Full feature, cohesive work packages use Standard, Protected,
-or Parallel execution tiers; this changes execution granularity without
-weakening final assurance or duplicating the skill tree.
+- its repository-relative path;
+- upstream Git blob SHA-256 and Git mode;
+- local SHA-256 and Git mode;
+- whether it is `unchanged` or `lite-modified`.
 
-## Offline Synchronization
+`excluded` lists upstream skill assets intentionally omitted from the pack. The
+union of retained and excluded paths must equal the pinned upstream `skills/`
+tree, so a newly added or silently omitted upstream file blocks verification.
 
-The sync tool does not fetch the network. It accepts a local checkout only and
-rejects any source whose HEAD, repository identity, tag, or commit differs from
-the immutable pinned baseline. Initialize a fresh package snapshot only after
-verifying that exact commit:
+Hashes are computed from Git blobs at the pinned commit, never from a checkout's
+newline-normalized working files. Local hashes normalize CRLF to LF only for
+valid UTF-8 text and do so at the byte level; explicit binary extensions,
+invalid UTF-8, and NUL-containing data retain exact bytes. Local modes are
+tracked separately.
+
+## Source Authentication
+
+All provenance commands require a local upstream clone supplied with `--source`.
+The tool verifies:
+
+1. source `HEAD` equals the pinned commit;
+2. the pinned tag resolves to that commit;
+3. `origin` identifies the pinned repository;
+4. tracked source files are clean;
+5. every retained blob hash and mode matches the manifest;
+6. retained and excluded paths account for the complete upstream skill tree.
+
+Untracked source files are ignored because no content is read from the working
+tree. Dirty tracked content is rejected. Sync reads canonical blobs with Git, so
+it cannot bless uncommitted source changes.
+
+## Source-Checkout Commands
+
+These maintenance commands are source-only. The published skill pack intentionally
+omits `scripts/` and does not expose npm lifecycle or maintenance commands.
 
 ```bash
-npm run upstream:init -- --source <upstream-checkout>
-npm run upstream:check -- --source <upstream-checkout>
-npm run upstream:sync -- --source <upstream-checkout>
+node scripts/upstream-sync.mjs check --source /path/to/superpowers
+node scripts/upstream-sync.mjs sync --source /path/to/superpowers
+node scripts/upstream-sync.mjs init --source /path/to/superpowers
 ```
 
-`check` reports additions, deletions, content or mode changes, and manifest
-status mismatches. `sync` updates only `unchanged` files and refuses to overwrite
-modified or Pi-adapted paths. Run structural, extension, and reference tests
-after every manual reconciliation.
+- `check` is read-only and reports source, inventory, local hash, and mode drift.
+- `sync` restores only `unchanged` files from pinned Git blobs. It never
+  overwrites `lite-modified` files or changes the manifest.
+- `init` rebuilds file records after a deliberate local reconciliation. Existing
+  exclusions remain explicit; undeclared upstream additions or local files
+  cause the command to stop.
+
+No command fetches from the network, moves a tag, changes the pin, or edits an
+exclusion. Updating the baseline requires a reviewed change to the pinned
+metadata and exclusion list before `init` is run.
+
+## Reconciliation Checklist
+
+1. Clone or fetch upstream separately and verify the intended signed/released tag.
+2. Update the pinned repository, tag, and commit in code, documentation, and the
+   manifest.
+3. Review every changed, added, and deleted upstream skill asset.
+4. Copy accepted unchanged assets and reconcile every `lite-modified` workflow.
+5. Update the explicit exclusion list with reasons in the reviewing change.
+6. Run `node scripts/upstream-sync.mjs init --source /path/to/superpowers`, inspect the complete manifest diff, then run `node scripts/test.mjs`.
+7. Run fresh-context behavioral evaluation for changed routing or execution
+   semantics before release.

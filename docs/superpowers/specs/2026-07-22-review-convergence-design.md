@@ -2,7 +2,10 @@
 
 ## Status
 
-Approved incremental design for `pi-superpowers-lite` Full and Standard review routing.
+Full protected-contract and final-review convergence rules remain active. The
+Standard independent-review path is superseded by
+`2026-07-28-superpowers-lite-skill-pack-design.md`: Standard uses self-review and
+escalates to Full before any independent review.
 
 ## Problem
 
