@@ -1,6 +1,6 @@
 # Durable Authority Review Prompt
 
-Use only when a protected authority or contract has a risk-triggered independent review budget. Routine authority receives inline self-review and user approval.
+Use only when a protected authority or contract has a risk-triggered independent review budget. Routine authority receives inline self-review and user approval; this prompt is not an independent Review identity and must not be dispatched as a routine authority/spec Review.
 
 First check authority sufficiency. Already approved authority that covers the outcome, acceptance, constraints, protected contracts, and effects should bind into writing-plans without renewed approval. Do not demand derived `acceptanceDelta`, `publicEntrypoint`, or cohesive work-package details; planning derives them.
 

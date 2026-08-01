@@ -17,7 +17,11 @@ Lite describes process cost, not a reduced skill inventory:
 |---|---|---|
 | **Micro** | Mechanical, local, non-behavioral edits | Inspect, change, focused validation |
 | **Standard** | Bounded behavior changes and bug fixes | Work in place, TDD when behavioral, self-review, scoped verification |
-| **Full** | Cross-cutting, ambiguous, security-sensitive, migratory, concurrent, or externally consequential work | Durable authority, milestones, isolation, bounded review, L0-L3 evidence |
+| **Full** | Cross-cutting, ambiguous, security-sensitive, migratory, concurrent, or externally consequential work | Durable authority, milestones, isolation, bounded review, Baseline/Package/Milestone/Final evidence |
+
+The same approved Full feature run spans its packages, corrections, and later milestones while reusing the same run root/manifest. Do not create a new run for continuation work; start one only for a distinct feature or authority or an explicit safe-boundary restart.
+
+Use these human-facing evidence names in reports: **Baseline (L0)**, **Package (L1)**, **Milestone (L2)**, and **Final (L3)**. Existing `L0`-`L3` keys and `l0`-`l3` paths remain compatibility aliases.
 
 A task may escalate when newly discovered risk crosses a route boundary. It must
 never silently downgrade.

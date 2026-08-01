@@ -17,12 +17,14 @@ Evidence first. A full command proves stated scope, not automatically the reposi
 
 Identify the claim's scope and tier before choosing a command:
 
-| Tier | Evidence scope | Permitted success language |
-|---|---|---|
-| L0 | cheapest prerequisite or structural probe | name that probe only |
-| L1 | one package behavior | `package-local checks passed` |
-| L2 | integrated milestone closure | `milestone integrated affected closure passed` |
-| L3 | complete finalization suite | `repository-wide suite passed` |
+| Tier | Human-facing label | Evidence scope | Permitted success language |
+|---|---|---|---|
+| Baseline (L0) | Baseline | cheapest prerequisite or structural probe | name that probe only |
+| Package (L1) | Package | one package behavior | `package-local checks passed` |
+| Milestone (L2) | Milestone | integrated milestone closure | `milestone integrated affected closure passed` |
+| Final (L3) | Final | complete finalization suite | `repository-wide suite passed` |
+
+These human-facing labels are canonical in status and report prose. Existing legacy L0-L3 keys (`L0`/`L1`/`L2`/`L3`) and `l0`/`l1`/`l2`/`l3` paths remain compatibility aliases.
 
 Package L1/internal GREEN cannot prove milestone or acceptance completion. L1/L2 cannot support "all checks," whole-change completion, or repository-wide claims. Do not run L3 for L1/L2. The manifest finalization gate owns L3.
 

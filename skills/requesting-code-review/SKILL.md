@@ -17,6 +17,8 @@ Use independent Review as a bounded gate, not an open-ended improvement search.
 
 Routine packages have no independent Review; use self-review, package L1, milestone L2, and final Review.
 
+Never create an independent Review identity for an execution plan, routine package, evidence machinery or finalizer, readiness/admission/integration bookkeeping, or ordinary frontier/package transition. These are controller self-review or focused Package/Milestone verification. Only a named protected contract or the final whole change may create an independent Full Review identity.
+
 An independent reviewer is either a host-provided fresh-context reviewer or a named human reviewer who did not author the change. Resolve that capability before Full execution. If neither is available, stop and report that Full cannot complete on the current host. Controller self-review cannot replace or consume the mandatory independent pass.
 
 ## Review Budget

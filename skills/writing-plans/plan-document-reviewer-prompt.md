@@ -1,6 +1,6 @@
 # Current Milestone Review Prompt
 
-Routine milestone derivation uses controller self-review. Use an independent reviewer only when a named protected-contract readiness decision already has Review budget; the call counts as a Review pass.
+Routine milestone derivation uses controller self-review. This prompt is not an independent Review identity: do not dispatch execution-plan or readiness Review for routine work. Use an independent reviewer only when a named protected-contract readiness decision already has Review budget; the call counts as a Review pass.
 
 ```text
 Review [RUN_MANIFEST] and its current frontier milestone container read-only against [AUTHORITY_DIR]. Do not plan later work.

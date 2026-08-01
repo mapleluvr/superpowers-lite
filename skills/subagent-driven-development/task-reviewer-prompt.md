@@ -1,9 +1,6 @@
 # Protected-Contract Reviewer Prompt Template
 
-Use only for a named protected contract whose readiness affects Full dependents.
-Routine packages have no independent Review; use self-review, package L1,
-milestone L2, and final whole-change Review. A migration, split, rename,
-correction, or role change must not reset a Review budget or identity.
+Use only for a named protected contract whose readiness affects Full dependents. Routine packages have no independent Review; use self-review, package L1, milestone L2, and final whole-change Review. Never create an independent Review identity for an execution plan, routine package, evidence machinery or finalizer, readiness/admission/integration bookkeeping, or ordinary frontier/package transition. Only this protected contract or the final whole change qualifies. A migration, split, rename, correction, or role change must not reset a Review budget or identity.
 
 A readiness, admission, acceptance, mandatory-rework, or integration verdict
 counts against the same bounded Review pass, whether named Reviewer, Oracle,

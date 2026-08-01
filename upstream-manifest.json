@@ -81,7 +81,7 @@
       "path": "skills/brainstorming/SKILL.md",
       "upstreamHash": "4a54a4858b99807f3155ed1614b2f116e35ea5c1b788e793f565dd837fd3891f",
       "upstreamMode": "100644",
-      "localHash": "b03df14cae8c44187007db892ea85d2571f3cb3e4545a0af6bd20c90ffd37ab4",
+      "localHash": "c8c802fce09c1c2b067ec6849d55397c1e10a8d4401e2a25d1c097dfd36bc79b",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -89,7 +89,7 @@
       "path": "skills/brainstorming/spec-document-reviewer-prompt.md",
       "upstreamHash": "95a0a195de9d984be2fffa95bab16fc8c563bc296a9cfc5e9c29cb3ece0d7457",
       "upstreamMode": "100644",
-      "localHash": "b5ef43448de146158943b8e096601e5c2cef8020f0e5efccfd6fb9c64f30894b",
+      "localHash": "3785ce120f4d95fac0208929a646c6cf10872a2cf3c926142b416173a042e09f",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -113,7 +113,7 @@
       "path": "skills/executing-plans/SKILL.md",
       "upstreamHash": "c4c3d8b628c51114cd165fb8246fe02744cd8be180032328391252e653028d9b",
       "upstreamMode": "100644",
-      "localHash": "7a9c1b7133d4f382aca72da13f9fffd8559872f06ceb4f7879c189a4dacf8980",
+      "localHash": "c57fa67c0f46d022686b30a9ab22592d4f6ab36a915b7b5a4455d53cb57b6248",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -137,7 +137,7 @@
       "path": "skills/requesting-code-review/code-reviewer.md",
       "upstreamHash": "b2f2ec7596925fe52dac158fdfbca19b3a7d779d619c481e6706a6c0001662d3",
       "upstreamMode": "100644",
-      "localHash": "2b810b59b1c66d2f8f56f144c09777226997a14f843080d16ed1c47c49c5ea77",
+      "localHash": "2314e6cc2a3afe8f43633268aeeaa223e86f098ec5d775b7cf5f641a39482f7e",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -145,7 +145,7 @@
       "path": "skills/requesting-code-review/SKILL.md",
       "upstreamHash": "d71cc01ba56d2325cf8af5f7c11837819b63ecd57de0bfdb812f7f3ff7751df8",
       "upstreamMode": "100644",
-      "localHash": "4844baf9d1ce8c1dbcfa37756b269db0afaf34076284db9916f65812a22f694a",
+      "localHash": "fa074f45fc8dd16f3c6ef5af91fe2b5c937f86c706768af641232a84af4f291c",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -161,7 +161,7 @@
       "path": "skills/subagent-driven-development/SKILL.md",
       "upstreamHash": "349a08ad8b59b19b86c13a7d2f34a1a38719bf88257004a863eefefa8d9f9e40",
       "upstreamMode": "100644",
-      "localHash": "6e07a5062f03fe53743809f2ac1b0ab60131c74e6da9ee411a2603647b31eb9c",
+      "localHash": "3bd2496e18af75f007aaef783f49e3907c4302dc27294e60940872123f9367eb",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -169,7 +169,7 @@
       "path": "skills/subagent-driven-development/task-reviewer-prompt.md",
       "upstreamHash": "e3b4a1bfe7cd55ed0459e5ca9cdddb6ff086c345b99e9097036db6a18545729e",
       "upstreamMode": "100644",
-      "localHash": "187aa4a051f6b8e81b6f0076c2865cbb1c646784655790fa9c7bcf3a92ede9e4",
+      "localHash": "32d9b15b1759e05f153fd47a6fa05d26d965948d3502a32e98b4c43dd14869c4",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -281,7 +281,7 @@
       "path": "skills/using-git-worktrees/SKILL.md",
       "upstreamHash": "8cfb86f121269e8f7f12361e6795c4f6738828340e28964c9229d365666c9edd",
       "upstreamMode": "100644",
-      "localHash": "2e0c5316830269875c268307ea596a2000ee8ccaeedfc3a9e916b786df1c8d1e",
+      "localHash": "7a2b15476288322bf2b2555e5c70dd6a25882fb93aad1068ef6e27985332322b",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -289,7 +289,7 @@
       "path": "skills/using-superpowers/SKILL.md",
       "upstreamHash": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
       "upstreamMode": "100644",
-      "localHash": "0adcd63d114940dca58eebfac1105aacee9c36302c649cce58ce27abf995c04c",
+      "localHash": "7e2837414c83966a1739019dcf78b2d8280aa9c293fe915c302325e61bf01b24",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -297,7 +297,7 @@
       "path": "skills/verification-before-completion/SKILL.md",
       "upstreamHash": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
       "upstreamMode": "100644",
-      "localHash": "71a7b8ac3cd584485fcc1fbeaac52d2abc285b8f4e79c8d90a79ad01b3c16afd",
+      "localHash": "12c910a741f035115e45795bf0c237939838ace672d3efd930344471f64f8d4b",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -305,7 +305,7 @@
       "path": "skills/writing-plans/plan-document-reviewer-prompt.md",
       "upstreamHash": "aa728b96aad603c8be28875a4305637f6c984aa81ffcadcb13e743202fa2a0c7",
       "upstreamMode": "100644",
-      "localHash": "e5df026a5dea93bf68f0abab1ae1e9b42532cddb404935e1a1cd3bbb68766c9b",
+      "localHash": "f71503b5882bd67cbf11c1edca8cd4667d41ee239f3b126fef26afe79650835f",
       "localMode": "100644",
       "status": "lite-modified"
     },
@@ -313,7 +313,7 @@
       "path": "skills/writing-plans/SKILL.md",
       "upstreamHash": "72190c88b2b5a67a96b91d66aa72b9161913e10e8769da3f28a226f4cc7b99d0",
       "upstreamMode": "100644",
-      "localHash": "411eda87f288151f77fdd01bc79ee3e24f080693ab3a7034bdb83173ad8da742",
+      "localHash": "e0a752f54fced817b2f2231f9540d18702e6de7f3dde1386f8c30c2b9be6df56",
       "localMode": "100644",
       "status": "lite-modified"
     },

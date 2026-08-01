@@ -1,5 +1,6 @@
 node_modules/
 _upstream/
+.pi-subagents/
 *.tgz
 .superpowers/
 evals/results/*

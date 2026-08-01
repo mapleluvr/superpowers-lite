@@ -7,7 +7,9 @@ description: Use for Full-route work after durable authority is approved and bef
 
 ## Overview
 
-Turn approved durable authority into one user-visible current milestone. The current runtime frontier is the milestone container: inspect current code and the complete public path first, then write derived runtime state, not a second durable specification. Do not promise or precompute later milestones, waves, frontiers, or a static feature graph.
+The current runtime frontier is the milestone container: inspect the complete public path first, then write derived runtime state, not a second durable specification. Do not promise or precompute later milestones, waves, frontiers, or a static feature graph.
+
+An approved Full feature run is long-lived across its milestones. At continuation, read and reuse the same run root and manifest; initialize a run only for a new feature or explicit safe-boundary restart. A package, correction, or next milestone must not create a new run.
 
 **Announce at start:** "I'm using writing-plans to initialize the current execution milestone."
 
@@ -104,6 +106,8 @@ Do not copy the full authority or historical corrections. A hidden dependency re
 Before dispatch, verify references/hashes, one owner per mandatory path, no parallel path/resource overlap, focused L1 for each package, and a real public entry point or controller-owned terminal E2E probe for each acceptance delta. Worker self-report is not this proof.
 
 ## Evidence and Finalization Boundary
+
+Human-facing evidence labels are Baseline (L0), Package (L1), Milestone (L2), and Final (L3). Existing `l0`/`l1`/`l2`/`l3` paths and `L0`/`L1`/`L2`/`L3` keys remain compatibility aliases; use the labels in status and report prose.
 
 Default to one structured record for each milestone L0, package L1, milestone L2, and final L3 gate. L2 proves the integrated affected closure through the declared public entry point or controlled E2E. Raw output is optional unless diagnostic or contractually required. No package or milestone runs repository-wide L3; L3 remains finalization-only.
 

@@ -5,7 +5,7 @@ description: "Use this skill for Full-route work, substantive design decisions, 
 
 # Brainstorming Ideas Into Durable Authority
 
-Use this skill for Full-route work, unresolved product or architecture choices, or an explicit brainstorming request. For Full execution, check authority sufficiency before opening design questions. When already approved authority is sufficient, reuse and bind it, then invoke writing-plans without reapproval. An explicit brainstorming request still explores the requested subject rather than silently taking that fast path. When decisions are unresolved or authority is missing, collect them in one consolidated decision packet where possible.
+Use this skill for Full-route work, unresolved product or architecture choices, or an explicit brainstorming request. For Full execution, check authority sufficiency before opening design questions. When already approved authority is sufficient, reuse and bind it, then invoke writing-plans without reapproval. When an approved Full feature run already has an active manifest, bind and reuse the same run for the next milestone; a package, correction, or later milestone must not initialize a new run root. A new run is only for a distinct feature or authority, or an explicit safe-boundary restart. An explicit brainstorming request still explores the requested subject rather than silently taking that fast path. When decisions are unresolved or authority is missing, collect them in one consolidated decision packet where possible.
 
 Understand the current project and resolve only missing product or protected-contract decisions. The output is minimal durable authority: what must be true and what must not change. Runtime task decomposition belongs to writing-plans and SDD.
 

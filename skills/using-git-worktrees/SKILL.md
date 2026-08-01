@@ -109,7 +109,7 @@ Setup is not verification. If a command can build project code, execute lifecycl
 
 Before edits, record the **frozen base SHA**, branch, and clean status. Record available CI status for that SHA; when no trustworthy CI result is available, write `CI status: unknown`, never green.
 
-Run only the current milestone's declared L0-L2 commands and preserve their exact output as the **selective baseline**. State the affected paths/contracts and claim only that scope. This is not a globally clean baseline and must never be described as globally clean.
+Run only the current milestone's declared L0-L2 commands and preserve their exact output as the **selective baseline**. In human-facing records, call these gates Baseline (L0), Package (L1), and Milestone (L2); retain the legacy level names for compatibility. State the affected paths/contracts and claim only that scope. This is not a globally clean baseline and must never be described as globally clean.
 
 If the current milestone lacks a trustworthy focused command, redesign the package boundary, add a focused harness, or defer it to final integration. Do not substitute a repository-wide suite.
 

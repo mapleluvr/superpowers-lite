@@ -1,6 +1,6 @@
 # Code Reviewer Prompt Template
 
-Use for bounded Full Review. Non-final Review uses one named protected contract. Routine packages have no independent Review; use self-review, package L1, milestone L2, and final Review. Migration, split, rename, correction, or role change cannot reset budget or identity.
+Use for bounded Full Review. Non-final Review uses one named protected contract. Routine packages have no independent Review; use self-review, package L1, milestone L2, and final Review. Never create an independent Review identity for an execution plan, routine package, evidence machinery or finalizer, readiness/admission/integration bookkeeping, or ordinary frontier/package transition. Only a named protected contract or the final whole change qualifies. Migration, split, rename, correction, or role change cannot reset budget or identity.
 
 ```text
 Reviewer prompt:

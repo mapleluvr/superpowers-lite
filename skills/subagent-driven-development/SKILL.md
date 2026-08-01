@@ -7,15 +7,15 @@ description: Use for Full-route work when a current dynamic milestone has isolat
 
 ## Overview
 
-Full is feature-level assurance. Execute one current Full milestone with cohesive work packages, isolated implementers where justified, native patch handoffs, a single canonical integrator, scoped verification, protected-contract review, compact evidence, and a mandatory final whole-change review. A package may be routine inline, protected contract, or isolated parallel; its tier never weakens Full assurance.
+Full is feature-level assurance across one approved Full feature run. Execute each milestone with cohesive packages, isolation, patch handoffs, verification, protected review, evidence, and mandatory final whole-change review. Packages are routine, protected, or parallel; tier never weakens Full assurance. Reuse same run manifest/root across packages, corrections, and later milestones; continuation never creates a new run.
 
 ## Route Gate
 
-Use this skill only with approved durable authority and `.superpowers/work/<run-id>/manifest.json`. Read the manifest first and verify authority, canonical state, history, protected risks, and finalization state.
+Use this skill only with approved durable authority and `.superpowers/work/<run-id>/manifest.json`; read it and verify authority, canonical state, history, risks, and finalization.
 
-For frontier execution, exactly one current frontier is the current milestone. Load its milestone records and task cards. When `currentFrontier` is null, require `finalization.status` to be `ready`, all history completed or superseded, no blocked milestone or protected risk, and the latest L2 bound to clean canonical state. If all pass, enter finalization. A null current frontier is invalid: stop unless that finalization-ready state is proven. Never fabricate or reopen a milestone.
+For frontier execution, exactly one current frontier is the milestone. Reuse the approved run manifest/root for later milestones; packages, corrections, and next milestones never create a new run. Load its records and task cards. When `currentFrontier` is null, require `finalization.status` to be `ready`, completed or superseded history, no blocked milestone or protected risk, and latest L2 bound to clean canonical state. If all pass, enter finalization. Otherwise a null current frontier is invalid: stop unless that finalization-ready state is proven. Never fabricate or reopen a milestone.
 
-Parallel SDD requires at least two independently mergeable enabling work packages; they need not be independently user-visible. They require frozen consumed interfaces or a pinned contract, disjoint `owns` and exact `mutableResources`, independent package L1, no dependency path inside the same dispatched round, no split transaction, and critical-path benefit after coordination, worktree, patch-admission, and milestone-L2 cost. A dependency chain, shared mutable owner, unsplit invariant, or unclear benefit stays routine inline. Standard and Micro do not use SDD. Do not consume legacy plans, copied authority, or session history as execution authority.
+Parallel SDD requires at least two independently mergeable enabling work packages; they need not be independently user-visible. They require frozen consumed interfaces or a pinned contract, disjoint `owns` and exact `mutableResources`, independent package L1, no dependency path inside the same dispatched round, no split transaction, and critical-path benefit after coordination, worktree, patch-admission, and milestone-L2 cost. A dependency chain, shared mutable owner, unsplit invariant, or unclear benefit stays routine inline. Standard/Micro do not use SDD. Do not consume legacy plans, copied authority, or session history as execution authority.
 
 Plan the current milestone as normally two to four packages in one to three rounds. Keep the same current milestone across package rounds; internal RED/GREEN never mints a new milestone or frontier.
 
@@ -41,7 +41,7 @@ For one current milestone, process planned rounds sequentially:
 3. Each implementer verifies manifest, milestone, `ROUND_BASE`, ownership, `mutableResources`, and passed L0; runs package L1 and self-review; then leaves owned changes for host-native patch capture. Temporary worker branches or workspaces may be destroyed after capture, so the handoff is a **patch**, not a branch merge.
 4. Wait for every current-round worker and patch. A failed, blocked, missing, or unresolved worker stops the milestone; the round applies zero patches and recovery returns canonical to `MILESTONE_BASE`.
 5. Before any patch from the current round is applied anywhere, preflight the complete round set: each patch is non-empty; changed paths are a subset of `owns`, including renames and deletions; write sets and exact `mutableResources` identities do not overlap; and `git apply --check` passes against unchanged `ROUND_BASE`. Any mismatch ultimately integrates zero milestone patches.
-6. Complete bounded Review only for a named protected-contract identity when required. Only impact-qualified Critical or Important findings block; unsupported severity labels become `defer` or `reject`. Routine packages have no independent Review.
+6. Complete bounded Review only for a named protected contract identity when required. Only impact-qualified Critical or Important findings block; unsupported severity labels become `defer` or `reject`. Routine packages have no independent Review.
 7. Apply approved current-round patches in package order on canonical. After each apply, run its package L1, inspect the diff, and commit atomically. Conflict, path drift, resource collision, or contract mismatch triggers recovery, not ad-hoc surgery.
 8. Continue the next round from new clean canonical state. After all rounds, run milestone union L2 once through the declared public entry or controlled E2E. Package L1 cannot prove milestone acceptance.
 9. On a **post-apply L1 failure before commit**, reverse-apply only the current uncommitted patch, then revert every earlier current-milestone commit in reverse order without rewriting history.
@@ -52,17 +52,19 @@ No work package or intermediate milestone runs repository-wide L3.
 
 ## Protected Review and Implementer Dispatch
 
-Independent Review is limited to a named protected contract before dependent consumers and the final whole change; each identity has one initial pass, one consolidated correction, and one closure pass. Migration, package split, frontier rename, role rename, or correction cannot reset or create a Review budget. Routine packages use TDD, self-review, package L1, and milestone L2.
+Independent Review only names a protected contract before dependent consumers or the final whole change; each identity has initial, correction, and closure. Never create an independent Review identity for an execution plan, routine package, evidence machinery/finalizer, readiness/admission/integration bookkeeping, or ordinary frontier/package transition; use controller self-review, Package checks, and Milestone closure. Migration, split, rename, role change, or correction cannot reset or create identity.
 
-Pass artifact paths, not full authority or session history. A task card names the frozen base, owned paths, exact `mutableResources` identities, controller-passed L0 evidence and milestone identity, milestone acceptance/public flow, exact declared package L1, consumed/produced interfaces, and report path. The implementer must not run L2, package-wide, repository-wide, migration, deployment, settings, or other live effects. It reports only package-local evidence and concerns.
+A package may be routine inline, protected contract, or isolated parallel. Routine packages use TDD, self-review, Package (L1), and Milestone (L2).
+
+Pass artifact paths, not full authority/session history. Each task card names base, `owns`, `mutableResources`, controller-passed L0, milestone acceptance/public flow, package L1, interfaces, and report path. Implementers must not run L2, package/repository-wide, migration, deployment, settings, or live effects; report package-local evidence and concerns.
 
 Treat statuses explicitly: `SOURCE_READY`, `DONE_WITH_CONCERNS`, `NEEDS_CONTEXT`, or `BLOCKED`. Only `SOURCE_READY` with a complete report and patch may enter complete-set preflight. Never turn a failed dispatch into implied approval.
 
 ## Dynamic Recovery and Evidence
 
-A hidden dependency invalidates the package map, integrates zero patches, and rederives the current milestone from canonical state. A local package defect with a valid milestone boundary stays in the same current milestone as a correction work package or package correction round; it does not create a new frontier. An invalid foundational boundary preserves patch forensic history and rederives from a clean base. Two rejected core-contract candidates force package re-decomposition or a contract/probe work package linked directly to the blocked public path.
+A hidden dependency invalidates the package map; rederive the current milestone from canonical state. A local package defect stays in the same current milestone as a correction work package/round, not a new frontier. An invalid boundary preserves forensic history and rederives from clean base. Two rejected core-contract candidates force package re-decomposition or a contract/probe package linked to the blocked public path.
 
-Use one structured record per gate by default:
+Use one structured record per gate by default. Human-facing labels are Baseline (L0), Package (L1), Milestone (L2), and Final (L3); retain `l0`/`l1`/`l2`/`l3` paths and `L0`/`L1`/`L2`/`L3` keys as compatibility aliases.
 
 ```text
 evidence/l0/record.json
@@ -71,7 +73,7 @@ evidence/l2/record.json
 finalization/evidence/l3.json
 ```
 
-Each record binds command/result, scope-qualified claim, `HEAD`/tree/status, authority identity, relevant non-secret fingerprints, attempts, and optional raw-output hash/path. Save raw output only for diagnosis, contractual inspection, or cross-session independent evidence. Do not create duplicate log, JSON, status, or manifest files for one command.
+Each record binds command/result, scope claim, `HEAD`/tree/status, authority, relevant non-secret fingerprints, attempts, and optional raw-output hash/path. Save raw only for diagnosis, contractual inspection, or cross-session evidence. Do not create duplicate log, JSON, status, or manifest files.
 
 ## Finalization and L3
 
