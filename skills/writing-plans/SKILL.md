@@ -9,7 +9,7 @@ description: Use for Full-route work after durable authority is approved and bef
 
 The current runtime frontier is the milestone container: inspect the complete public path first, then write derived runtime state, not a second durable specification. Do not promise or precompute later milestones, waves, frontiers, or a static feature graph.
 
-An approved Full feature run is long-lived across its milestones. At continuation, read and reuse the same run root and manifest; initialize a run only for a new feature or explicit safe-boundary restart. A package, correction, or next milestone must not create a new run.
+An approved Full feature run is long-lived across its milestones. At continuation, read and reuse the same run root and manifest; initialize a run only for a distinct feature or authority, or an explicit safe-boundary restart. A package, correction, or next milestone must not create a new run.
 
 **Announce at start:** "I'm using writing-plans to initialize the current execution milestone."
 

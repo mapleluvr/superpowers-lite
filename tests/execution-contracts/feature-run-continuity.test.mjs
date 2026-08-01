@@ -14,9 +14,19 @@ assert.match(router,
 assert.match(router,
   /(?:Do not|never) create a new run root for internal continuation work/i,
   "the router must prohibit per-package and per-milestone run roots");
-assert.match(router,
-  /new run[\s\S]{0,160}(?:distinct feature|new authority|safe-boundary restart)/i,
-  "the router must define the narrow new-run exceptions");
+for (const [label, content] of [
+  ["using-superpowers", router],
+  ["brainstorming", brainstorming],
+  ["writing-plans", planning],
+]) {
+  for (const [boundary, pattern] of [
+    ["distinct feature", /(?:distinct|new) feature/i],
+    ["distinct authority", /(?:distinct|new)(?: feature or)? authority/i],
+    ["explicit safe-boundary restart", /explicit safe-boundary restart/i],
+  ]) {
+    assert.match(content, pattern, `${label} must retain the ${boundary} new-run boundary`);
+  }
+}
 assert.doesNotMatch(router, /Routes apply per task\./i,
   "the old unqualified per-task route rule must not reopen feature assurance");
 
