@@ -11,6 +11,8 @@ its native skill mechanism.
 
 ## What "Lite" Means
 
+**Proved to be super-heavy for jobs like refactoring. This project is discarded.**
+
 Lite describes process cost, not a reduced skill inventory:
 
 | Route | Use for | Default workflow |
